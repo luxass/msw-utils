@@ -4,7 +4,7 @@ import { afterAll, afterEach, beforeAll, describe, expect, it } from "vitest";
 import { createMockFetch } from "../src/index";
 
 const server = setupServer();
-const { mockFetch } = createMockFetch({ mswServer: server });
+const mockFetch = createMockFetch({ mswServer: server });
 
 beforeAll(() => server.listen({ onUnhandledRequest: "error" }));
 afterEach(() => server.resetHandlers());
@@ -17,10 +17,9 @@ describe("createMockFetch", () => {
     );
   });
 
-  it("should return an object with mockFetch function", () => {
+  it("should return mockFetch function", () => {
     const result = createMockFetch({ mswServer: server });
-    expect(result).toHaveProperty("mockFetch");
-    expect(typeof result.mockFetch).toBe("function");
+    expect(typeof result).toBe("function");
   });
 });
 

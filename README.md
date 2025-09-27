@@ -25,7 +25,7 @@ import { createMockFetch } from "@luxass/msw-utils";
 import { setupServer } from "msw/node";
 
 export const server = setupServer();
-export const { mockFetch } = createMockFetch({ mswServer: server });
+export const mockFetch = createMockFetch({ mswServer: server });
 ```
 
 ```ts
@@ -66,7 +66,7 @@ import { createMockFetch } from "@luxass/msw-utils";
 import { setupServer } from "msw/node";
 
 export const server = setupServer();
-export const { mockFetch } = createMockFetch({ mswServer: server });
+export const mockFetch = createMockFetch({ mswServer: server });
 ```
 
 ```ts
@@ -112,7 +112,7 @@ Creates a mockFetch function that uses MSW server under the hood but provides a 
 
 #### Returns
 
-An object containing the `mockFetch` function.
+The `mockFetch` function.
 
 ### `mockFetch(methods, url, resolver)`
 
