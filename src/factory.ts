@@ -35,7 +35,7 @@ export function createMockFetch({ mswServer }: CreateMockFetchOptions): MockFetc
   }
 
   const mockFetch: MockFetchFn = (
-    methodsOrEndpoints,
+    methodsOrEndpoints: NonEmptyArray<HTTPMethod> | HTTPMethod | [NonEmptyArray<HTTPMethod> | HTTPMethod, string, HttpResponseResolver][],
     url?: string,
     resolver?: HttpResponseResolver,
   ) => {
