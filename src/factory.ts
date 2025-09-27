@@ -10,9 +10,8 @@ export interface CreateMockFetchOptions {
 /**
  * Creates a mockFetch function that provides a cleaner API for defining MSW handlers.
  *
- * @param options - Configuration options
- * @param options.mswServer - MSW server instance from setupServer()
- * @returns The mockFetch function
+ * @param {CreateMockFetchOptions} options - Configuration options
+ * @returns {MockFetchFn} The mockFetch function
  *
  * @example
  * ```ts
@@ -29,9 +28,11 @@ export interface CreateMockFetchOptions {
  * ]);
  * ```
  */
-export function createMockFetch({ mswServer }: CreateMockFetchOptions): MockFetchFn {
+export function createMockFetch(options: CreateMockFetchOptions): MockFetchFn {
+  const { mswServer } = options;
+
   if (!mswServer) {
-    throw new Error("mswServer instance is required to create mockFetch");
+    throw new Error("mswServer is required to create mockFetch");
   }
 
   const mockFetch: MockFetchFn = (
