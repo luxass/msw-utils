@@ -51,6 +51,7 @@
     "msw": "2.11.3",
     "publint": "0.3.13",
     "tsdown": "0.15.5",
-    "typescript": "5.9.2"
+    "typescript": "5.9.2",
+    "vitest": "3.2.4"
   }
 }
