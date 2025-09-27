@@ -1,0 +1,56 @@
+{
+  "name": "@luxass/msw-utils",
+  "version": "0.0.0",
+  "description": "Utilities for working with MSW",
+  "type": "module",
+  "author": {
+    "name": "Lucas Nørgård",
+    "email": "lucasnrgaard@gmail.com",
+    "url": "https://luxass.dev"
+  },
+  "packageManager": "pnpm@10.17.1",
+  "license": "MIT",
+  "homepage": "https://github.com/luxass/msw-utils#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/luxass/msw-utils.git"
+  },
+  "bugs": "https://github.com/luxass/msw-utils/issues",
+  "keywords": [
+    "msw",
+    "utils"
+  ],
+  "exports": {
+    ".": "./dist/index.js",
+    "./package.json": "./package.json"
+  },
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsdown",
+    "dev": "tsdown --watch",
+    "test": "vitest --run",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint ."
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "peerDependencies": {
+    "msw": ">=2.11.0 <3.0.0"
+  },
+  "devDependencies": {
+    "@luxass/eslint-config": "5.3.2",
+    "@types/node": "22.18.6",
+    "eslint": "9.36.0",
+    "eslint-plugin-format": "1.0.2",
+    "msw": "2.11.3",
+    "publint": "0.3.13",
+    "tsdown": "0.15.5",
+    "typescript": "5.9.2"
+  }
+}
