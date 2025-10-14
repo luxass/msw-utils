@@ -8,7 +8,7 @@
     "email": "lucasnrgaard@gmail.com",
     "url": "https://luxass.dev"
   },
-  "packageManager": "pnpm@10.18.0",
+  "packageManager": "pnpm@10.18.3",
   "license": "MIT",
   "homepage": "https://github.com/luxass/msw-utils#readme",
   "repository": {
@@ -48,9 +48,9 @@
     "@types/node": "22.18.6",
     "eslint": "9.37.0",
     "eslint-plugin-format": "1.0.2",
-    "msw": "2.11.3",
-    "publint": "0.3.13",
-    "tsdown": "0.15.6",
+    "msw": "2.11.5",
+    "publint": "0.3.14",
+    "tsdown": "0.15.7",
     "typescript": "5.9.3",
     "vitest": "3.2.4"
   }
