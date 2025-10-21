@@ -4,8 +4,8 @@
  * MSW throws internal errors with the name "InternalError" and
  * prefixes error messages with "[MSW]".
  *
- * @param error - The error to check
- * @returns true if the error is from MSW
+ * @param {unknown} error - The error to check
+ * @returns {boolean} true if the error is from MSW
  *
  * @example
  * ```ts
