@@ -1,9 +1,10 @@
 import { defineConfig } from "tsdown";
 
 export default defineConfig({
-  entry: [
-    "./src/index.ts",
-  ],
+  entry: {
+    "index": "src/index.ts",
+    "runtime-guards": "src/runtime-guards.ts",
+  },
   exports: true,
   format: ["esm"],
   clean: true,

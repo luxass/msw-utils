@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { isMSWError } from "../src";
+import { isMSWError } from "../src/runtime-guards";
 
 describe("isMSWError", () => {
   it("returns true for errors with InternalError name", () => {

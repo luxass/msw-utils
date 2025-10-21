@@ -132,6 +132,38 @@ Register multiple endpoints at once.
 
 - `endpoints`: Array of `[methods, url, resolver]` tuples
 
+## Runtime Guards
+
+The package also exports runtime type guards for MSW-specific types. Import from `@luxass/msw-utils/runtime-guards`:
+
+### `isMSWError(error)`
+
+Checks if an error is an MSW internal error. MSW throws internal errors with the name `"InternalError"` and prefixes error messages with `"[MSW]"`.
+
+#### Parameters
+
+- `error`: The error to check (type: `unknown`)
+
+#### Returns
+
+`true` if the error is from MSW (type predicate: `error is Error`)
+
+#### Example
+
+```ts
+import { isMSWError } from "@luxass/msw-utils/runtime-guards";
+
+try {
+  // some code that might throw MSW errors
+} catch (error) {
+  if (isMSWError(error)) {
+    console.log("This is an MSW error:", error.message);
+  } else {
+    console.log("This is not an MSW error");
+  }
+}
+```
+
 ## 📄 License
 
 Published under [MIT License](./LICENSE).
