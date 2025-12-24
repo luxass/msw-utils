@@ -188,7 +188,7 @@ describe("createMockFetch", () => {
   });
 
   describe("openapi path parameters", () => {
-    it("skip replacing openapi path parameters when not enabled", async () => {
+    it("does not replace openapi path parameters when not enabled", async () => {
       const spy = vi.spyOn(server, "use");
       const mockFetch = createMockFetch({
         mswServer: server,

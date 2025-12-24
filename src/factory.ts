@@ -3,6 +3,8 @@ import type { SetupServerApi } from "msw/node";
 import type { HTTPMethod, MockFetchFn, NonEmptyArray } from "./types";
 import { createHandlersFromMethods } from "./utils";
 
+const OPENAPI_PATH_PARAM_RE = /\{([^}]+)\}/g;
+
 export interface CreateMockFetchOptions {
   mswServer: SetupServerApi;
 
@@ -54,7 +56,7 @@ export function createMockFetch(options: CreateMockFetchOptions): MockFetchFn {
         const methodArray = Array.isArray(methods) ? methods : [methods];
 
         if (replaceOpenAPIPathParams) {
-          endpointUrl = endpointUrl.replace(/\/\{([^}]+)\}/g, "/:$1");
+          endpointUrl = endpointUrl.replace(OPENAPI_PATH_PARAM_RE, "/:$1");
         }
 
         return createHandlersFromMethods(methodArray, endpointUrl, handlerResolver);
@@ -70,7 +72,7 @@ export function createMockFetch(options: CreateMockFetchOptions): MockFetchFn {
       const methodArray = Array.isArray(methods) ? methods : [methods];
 
       if (replaceOpenAPIPathParams) {
-        url = url.replace(/\/\{([^}]+)\}/g, "/:$1");
+        url = url.replace(OPENAPI_PATH_PARAM_RE, "/:$1");
       }
 
       const handlers = createHandlersFromMethods(methodArray, url, resolver);
