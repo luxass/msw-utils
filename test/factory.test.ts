@@ -144,4 +144,96 @@ describe("createMockFetch", () => {
     const bad = ["GET", "/wrong/single-tuple", () => HttpResponse.json({ ok: true })];
     expect(() => mockFetch(bad as any)).toThrow("invalid arguments for mockFetch");
   });
+
+  describe("path parameters", () => {
+    it("matches path parameters", async () => {
+      const spy = vi.spyOn(server, "use");
+      mockFetch([
+        [
+          ["GET"],
+          `${base}/users/:id`,
+          ({ params }) => {
+            return HttpResponse.json({ id: params.id });
+          },
+        ],
+      ]);
+
+      expect(spy).toHaveBeenCalledTimes(1);
+      expect(spy.mock.calls[0]).toHaveLength(1);
+
+      const resGet = await fetch(`${base}/users/123`);
+      expect(resGet.status).toBe(200);
+      expect(await resGet.json()).toEqual({ id: "123" });
+    });
+
+    it("matches path parameters with multiple segments", async () => {
+      const spy = vi.spyOn(server, "use");
+      mockFetch([
+        [
+          ["GET"],
+          `${base}/users/:id/posts/:postId`,
+          ({ params }) => {
+            return HttpResponse.json({ id: params.id, postId: params.postId });
+          },
+        ],
+      ]);
+
+      expect(spy).toHaveBeenCalledTimes(1);
+      expect(spy.mock.calls[0]).toHaveLength(1);
+
+      const resGet = await fetch(`${base}/users/123/posts/456`);
+      expect(resGet.status).toBe(200);
+      expect(await resGet.json()).toEqual({ id: "123", postId: "456" });
+    });
+  });
+
+  describe("openapi path parameters", () => {
+    it("skip replacing openapi path parameters when not enabled", async () => {
+      const spy = vi.spyOn(server, "use");
+      const mockFetch = createMockFetch({
+        mswServer: server,
+        replaceOpenAPIPathParams: false,
+      });
+
+      mockFetch([
+        [
+          ["GET"],
+          `${base}/users/{id}/posts/{postId}`,
+          ({ params }) => {
+            return HttpResponse.json({ id: params.id, postId: params.postId });
+          },
+        ],
+      ]);
+
+      expect(spy).toHaveBeenCalledTimes(1);
+      expect(spy.mock.calls[0]).toHaveLength(1);
+
+      await expect(() => fetch(`${base}/users/123/posts/456`)).rejects.toThrow(/\[MSW\] Cannot bypass a request when using the "error" strategy for the "onUnhandledRequest" option\./);
+    });
+
+    it("replaces openapi path parameters with msw", async () => {
+      const spy = vi.spyOn(server, "use");
+      const mockFetch = createMockFetch({
+        mswServer: server,
+        replaceOpenAPIPathParams: true,
+      });
+
+      mockFetch([
+        [
+          ["GET"],
+          `${base}/users/{id}/posts/{postId}`,
+          ({ params }) => {
+            return HttpResponse.json({ id: params.id, postId: params.postId });
+          },
+        ],
+      ]);
+
+      expect(spy).toHaveBeenCalledTimes(1);
+      expect(spy.mock.calls[0]).toHaveLength(1);
+
+      const resGet = await fetch(`${base}/users/123/posts/456`);
+      expect(resGet.status).toBe(200);
+      expect(await resGet.json()).toEqual({ id: "123", postId: "456" });
+    });
+  });
 });

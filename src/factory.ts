@@ -5,6 +5,13 @@ import { createHandlersFromMethods } from "./utils";
 
 export interface CreateMockFetchOptions {
   mswServer: SetupServerApi;
+
+  /**
+   * Whether or not to replace OpenAPI Path Parameters
+   *
+   * @default false
+   */
+  replaceOpenAPIPathParams?: boolean;
 }
 
 /**
@@ -29,7 +36,7 @@ export interface CreateMockFetchOptions {
  * ```
  */
 export function createMockFetch(options: CreateMockFetchOptions): MockFetchFn {
-  const { mswServer } = options;
+  const { mswServer, replaceOpenAPIPathParams = false } = options;
 
   if (!mswServer) {
     throw new Error("mswServer is required to create mockFetch");
@@ -45,6 +52,11 @@ export function createMockFetch(options: CreateMockFetchOptions): MockFetchFn {
       const endpoints = methodsOrEndpoints as [NonEmptyArray<HTTPMethod> | HTTPMethod, string, HttpResponseResolver][];
       const handlers = endpoints.flatMap(([methods, endpointUrl, handlerResolver]) => {
         const methodArray = Array.isArray(methods) ? methods : [methods];
+
+        if (replaceOpenAPIPathParams) {
+          endpointUrl = endpointUrl.replace(/\/\{([^}]+)\}/g, "/:$1");
+        }
+
         return createHandlersFromMethods(methodArray, endpointUrl, handlerResolver);
       });
 
@@ -56,6 +68,11 @@ export function createMockFetch(options: CreateMockFetchOptions): MockFetchFn {
       // handle single registration
       const methods = methodsOrEndpoints as NonEmptyArray<HTTPMethod> | HTTPMethod;
       const methodArray = Array.isArray(methods) ? methods : [methods];
+
+      if (replaceOpenAPIPathParams) {
+        url = url.replace(/\/\{([^}]+)\}/g, "/:$1");
+      }
+
       const handlers = createHandlersFromMethods(methodArray, url, resolver);
 
       mswServer.use(...handlers);
