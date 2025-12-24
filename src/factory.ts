@@ -1,10 +1,17 @@
 import type { HttpResponseResolver } from "msw";
 import type { SetupServerApi } from "msw/node";
 import type { HTTPMethod, MockFetchFn, NonEmptyArray } from "./types";
-import { createHandlersFromMethods } from "./utils";
+import { createHandlersFromMethods, replaceOpenAPIPathParamsWithMSWParams } from "./utils";
 
 export interface CreateMockFetchOptions {
   mswServer: SetupServerApi;
+
+  /**
+   * Whether or not to replace OpenAPI Path Parameters
+   *
+   * @default false
+   */
+  replaceOpenAPIPathParams?: boolean;
 }
 
 /**
@@ -29,14 +36,14 @@ export interface CreateMockFetchOptions {
  * ```
  */
 export function createMockFetch(options: CreateMockFetchOptions): MockFetchFn {
-  const { mswServer } = options;
+  const { mswServer, replaceOpenAPIPathParams = false } = options;
 
   if (!mswServer) {
     throw new Error("mswServer is required to create mockFetch");
   }
 
   const mockFetch: MockFetchFn = (
-    methodsOrEndpoints: NonEmptyArray<HTTPMethod> | HTTPMethod | [NonEmptyArray<HTTPMethod> | HTTPMethod, string, HttpResponseResolver][],
+    methodsOrEndpoints,
     url?: string,
     resolver?: HttpResponseResolver,
   ) => {
@@ -45,7 +52,12 @@ export function createMockFetch(options: CreateMockFetchOptions): MockFetchFn {
       const endpoints = methodsOrEndpoints as [NonEmptyArray<HTTPMethod> | HTTPMethod, string, HttpResponseResolver][];
       const handlers = endpoints.flatMap(([methods, endpointUrl, handlerResolver]) => {
         const methodArray = Array.isArray(methods) ? methods : [methods];
-        return createHandlersFromMethods(methodArray, endpointUrl, handlerResolver);
+
+        const finalUrl = replaceOpenAPIPathParams
+          ? replaceOpenAPIPathParamsWithMSWParams(endpointUrl)
+          : endpointUrl;
+
+        return createHandlersFromMethods(methodArray, finalUrl, handlerResolver);
       });
 
       mswServer.use(...handlers);
@@ -56,7 +68,12 @@ export function createMockFetch(options: CreateMockFetchOptions): MockFetchFn {
       // handle single registration
       const methods = methodsOrEndpoints as NonEmptyArray<HTTPMethod> | HTTPMethod;
       const methodArray = Array.isArray(methods) ? methods : [methods];
-      const handlers = createHandlersFromMethods(methodArray, url, resolver);
+
+      const finalUrl = replaceOpenAPIPathParams
+        ? replaceOpenAPIPathParamsWithMSWParams(url)
+        : url;
+
+      const handlers = createHandlersFromMethods(methodArray, finalUrl, resolver);
 
       mswServer.use(...handlers);
       return;

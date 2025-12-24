@@ -35,3 +35,10 @@ export function createHeadHandler(url: string, resolver: HttpResponseResolver) {
     return new HttpResponse(null, { status: 200 });
   });
 }
+
+const OPENAPI_PATH_PARAM_RE = /\{([^}]+)\}/g;
+
+export function replaceOpenAPIPathParamsWithMSWParams(url: string): string {
+  OPENAPI_PATH_PARAM_RE.lastIndex = 0;
+  return url.replace(OPENAPI_PATH_PARAM_RE, ":$1");
+}
