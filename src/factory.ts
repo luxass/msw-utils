@@ -1,9 +1,7 @@
 import type { HttpResponseResolver } from "msw";
 import type { SetupServerApi } from "msw/node";
 import type { HTTPMethod, MockFetchFn, NonEmptyArray } from "./types";
-import { createHandlersFromMethods } from "./utils";
-
-const OPENAPI_PATH_PARAM_RE = /\{([^}]+)\}/g;
+import { createHandlersFromMethods, replaceOpenAPIPathParamsWithMSWParams } from "./utils";
 
 export interface CreateMockFetchOptions {
   mswServer: SetupServerApi;
@@ -45,7 +43,7 @@ export function createMockFetch(options: CreateMockFetchOptions): MockFetchFn {
   }
 
   const mockFetch: MockFetchFn = (
-    methodsOrEndpoints: NonEmptyArray<HTTPMethod> | HTTPMethod | [NonEmptyArray<HTTPMethod> | HTTPMethod, string, HttpResponseResolver][],
+    methodsOrEndpoints,
     url?: string,
     resolver?: HttpResponseResolver,
   ) => {
@@ -56,7 +54,7 @@ export function createMockFetch(options: CreateMockFetchOptions): MockFetchFn {
         const methodArray = Array.isArray(methods) ? methods : [methods];
 
         if (replaceOpenAPIPathParams) {
-          endpointUrl = endpointUrl.replace(OPENAPI_PATH_PARAM_RE, "/:$1");
+          endpointUrl = replaceOpenAPIPathParamsWithMSWParams(endpointUrl);
         }
 
         return createHandlersFromMethods(methodArray, endpointUrl, handlerResolver);
@@ -72,7 +70,7 @@ export function createMockFetch(options: CreateMockFetchOptions): MockFetchFn {
       const methodArray = Array.isArray(methods) ? methods : [methods];
 
       if (replaceOpenAPIPathParams) {
-        url = url.replace(OPENAPI_PATH_PARAM_RE, "/:$1");
+        url = replaceOpenAPIPathParamsWithMSWParams(url);
       }
 
       const handlers = createHandlersFromMethods(methodArray, url, resolver);
