@@ -53,11 +53,11 @@ export function createMockFetch(options: CreateMockFetchOptions): MockFetchFn {
       const handlers = endpoints.flatMap(([methods, endpointUrl, handlerResolver]) => {
         const methodArray = Array.isArray(methods) ? methods : [methods];
 
-        if (replaceOpenAPIPathParams) {
-          endpointUrl = replaceOpenAPIPathParamsWithMSWParams(endpointUrl);
-        }
+        const finalUrl = replaceOpenAPIPathParams
+          ? replaceOpenAPIPathParamsWithMSWParams(endpointUrl)
+          : endpointUrl;
 
-        return createHandlersFromMethods(methodArray, endpointUrl, handlerResolver);
+        return createHandlersFromMethods(methodArray, finalUrl, handlerResolver);
       });
 
       mswServer.use(...handlers);
@@ -69,11 +69,11 @@ export function createMockFetch(options: CreateMockFetchOptions): MockFetchFn {
       const methods = methodsOrEndpoints as NonEmptyArray<HTTPMethod> | HTTPMethod;
       const methodArray = Array.isArray(methods) ? methods : [methods];
 
-      if (replaceOpenAPIPathParams) {
-        url = replaceOpenAPIPathParamsWithMSWParams(url);
-      }
+      const finalUrl = replaceOpenAPIPathParams
+        ? replaceOpenAPIPathParamsWithMSWParams(url)
+        : url;
 
-      const handlers = createHandlersFromMethods(methodArray, url, resolver);
+      const handlers = createHandlersFromMethods(methodArray, finalUrl, resolver);
 
       mswServer.use(...handlers);
       return;
