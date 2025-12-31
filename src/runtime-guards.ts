@@ -1,3 +1,5 @@
+import type { MSWError } from "./errors";
+
 /**
  * Checks if an error is an MSW internal error.
  *
@@ -18,7 +20,7 @@
  * }
  * ```
  */
-export function isMSWError(error: unknown): error is Error {
+export function isMSWError(error: unknown): error is MSWError {
   return (
     error instanceof Error
     && (error.name === "InternalError" || error.message.startsWith("[MSW]"))
