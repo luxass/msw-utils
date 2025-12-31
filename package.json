@@ -8,7 +8,7 @@
     "email": "lucasnrgaard@gmail.com",
     "url": "https://luxass.dev"
   },
-  "packageManager": "pnpm@10.26.1",
+  "packageManager": "pnpm@10.27.0",
   "license": "MIT",
   "homepage": "https://github.com/luxass/msw-utils#readme",
   "repository": {
@@ -21,13 +21,13 @@
     "utils"
   ],
   "exports": {
-    ".": "./dist/index.js",
-    "./runtime-guards": "./dist/runtime-guards.js",
+    ".": "./dist/index.mjs",
+    "./runtime-guards": "./dist/runtime-guards.mjs",
     "./package.json": "./package.json"
   },
-  "main": "./dist/index.js",
-  "module": "./dist/index.js",
-  "types": "./dist/index.d.ts",
+  "main": "./dist/index.mjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.mts",
   "files": [
     "dist"
   ],
@@ -49,9 +49,9 @@
     "@types/node": "22.18.8",
     "eslint": "9.39.2",
     "eslint-plugin-format": "1.1.0",
-    "msw": "2.12.4",
+    "msw": "2.12.7",
     "publint": "0.3.16",
-    "tsdown": "0.18.1",
+    "tsdown": "0.18.4",
     "typescript": "5.9.3",
     "vitest": "4.0.16"
   },
