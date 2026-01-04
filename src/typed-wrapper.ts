@@ -7,7 +7,7 @@ import type { HTTPMethod, MockFetchFn, NonEmptyArray } from "./types";
  */
 type TypedEndpointsBatchWrapper<
   Registry extends Record<string, any>,
-  T extends ReadonlyArray<readonly [any, keyof Registry & string, any]>
+  T extends ReadonlyArray<readonly [any, keyof Registry & string, any]>,
 > = {
   [K in keyof T]: T[K] extends readonly [infer Methods, infer URL, any]
     ? Methods extends HTTPMethod
@@ -17,10 +17,10 @@ type TypedEndpointsBatchWrapper<
           : readonly [Methods, URL, HttpResponseResolver]
         : readonly [Methods, URL, HttpResponseResolver]
       : Methods extends NonEmptyArray<HTTPMethod>
-      ? URL extends keyof Registry & string
-        ? readonly [Methods, URL, HttpResponseResolver<PathParams, any, Registry[URL][Methods[number]]>]
-        : readonly [Methods, URL, HttpResponseResolver]
-      : never
+        ? URL extends keyof Registry & string
+          ? readonly [Methods, URL, HttpResponseResolver<PathParams, any, Registry[URL][Methods[number]]>]
+          : readonly [Methods, URL, HttpResponseResolver]
+        : never
     : never;
 };
 
@@ -52,7 +52,7 @@ export interface TypedMockFetchFn<Registry extends Record<string, any>> {
   // Overload 1: Single method + URL from registry
   <
     URL extends keyof Registry & string,
-    Method extends keyof Registry[URL] & HTTPMethod
+    Method extends keyof Registry[URL] & HTTPMethod,
   >(
     method: Method,
     url: URL,
@@ -62,7 +62,7 @@ export interface TypedMockFetchFn<Registry extends Record<string, any>> {
   // Overload 2: Multiple methods + URL from registry
   <
     URL extends keyof Registry & string,
-    Methods extends NonEmptyArray<keyof Registry[URL] & HTTPMethod>
+    Methods extends NonEmptyArray<keyof Registry[URL] & HTTPMethod>,
   >(
     methods: Methods,
     url: URL,
