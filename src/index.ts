@@ -1,3 +1,5 @@
 export { createMockFetch, type CreateMockFetchOptions } from "./factory";
 
-export type { MockFetchFn } from "./types";
+export { createTypedMockFetch, type TypedMockFetchFn } from "./typed-wrapper";
+
+export type { MockFetchFn, URLRegistry } from "./types";
