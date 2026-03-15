@@ -10,10 +10,10 @@ importers:
     devDependencies:
       '@luxass/eslint-config':
         specifier: 7.3.0
-        version: 7.3.0(@typescript-eslint/rule-tester@8.57.0(eslint@10.0.3(jiti@2.6.0))(typescript@5.9.3))(@typescript-eslint/typescript-estree@8.57.0(typescript@5.9.3))(@typescript-eslint/utils@8.57.0(eslint@10.0.3(jiti@2.6.0))(typescript@5.9.3))(@vue/compiler-sfc@3.5.22)(eslint-plugin-format@2.0.1(eslint@10.0.3(jiti@2.6.0)))(eslint@10.0.3(jiti@2.6.0))(typescript@5.9.3)(vitest@4.1.0(@types/node@22.18.8)(msw@2.12.10(@types/node@22.18.8)(typescript@5.9.3))(vite@7.1.7(@types/node@22.18.8)(jiti@2.6.0)(yaml@2.8.2)))
+        version: 7.3.0(@typescript-eslint/rule-tester@8.57.0(eslint@10.0.3(jiti@2.6.0))(typescript@5.9.3))(@typescript-eslint/typescript-estree@8.57.0(typescript@5.9.3))(@typescript-eslint/utils@8.57.0(eslint@10.0.3(jiti@2.6.0))(typescript@5.9.3))(@vue/compiler-sfc@3.5.22)(eslint-plugin-format@2.0.1(eslint@10.0.3(jiti@2.6.0)))(eslint@10.0.3(jiti@2.6.0))(typescript@5.9.3)(vitest@4.1.0(@types/node@22.19.15)(msw@2.12.10(@types/node@22.19.15)(typescript@5.9.3))(vite@7.1.7(@types/node@22.19.15)(jiti@2.6.0)(yaml@2.8.2)))
       '@types/node':
-        specifier: 22.18.8
-        version: 22.18.8
+        specifier: 22.19.15
+        version: 22.19.15
       eslint:
         specifier: 10.0.3
         version: 10.0.3(jiti@2.6.0)
@@ -22,7 +22,7 @@ importers:
         version: 2.0.1(eslint@10.0.3(jiti@2.6.0))
       msw:
         specifier: 2.12.10
-        version: 2.12.10(@types/node@22.18.8)(typescript@5.9.3)
+        version: 2.12.10(@types/node@22.19.15)(typescript@5.9.3)
       publint:
         specifier: 0.3.18
         version: 0.3.18
@@ -34,7 +34,7 @@ importers:
         version: 5.9.3
       vitest:
         specifier: 4.1.0
-        version: 4.1.0(@types/node@22.18.8)(msw@2.12.10(@types/node@22.18.8)(typescript@5.9.3))(vite@7.1.7(@types/node@22.18.8)(jiti@2.6.0)(yaml@2.8.2))
+        version: 4.1.0(@types/node@22.19.15)(msw@2.12.10(@types/node@22.19.15)(typescript@5.9.3))(vite@7.1.7(@types/node@22.19.15)(jiti@2.6.0)(yaml@2.8.2))
 
 packages:
 
@@ -854,8 +854,8 @@ packages:
   '@types/ms@2.1.0':
     resolution: {integrity: sha512-GsCCIZDE/p3i96vtEqx+7dBUGXrc7zeSK3wwPHIaRThS+9OhWIXRqzs4d6k1SVU8g91DrNRWxWUGhp5KXQb2VA==}
 
-  '@types/node@22.18.8':
-    resolution: {integrity: sha512-pAZSHMiagDR7cARo/cch1f3rXy0AEXwsVsVH09FcyeJVAzCnGgmYis7P3JidtTUjyadhTeSo8TgRPswstghDaw==}
+  '@types/node@22.19.15':
+    resolution: {integrity: sha512-F0R/h2+dsy5wJAUe3tAU6oqa2qbWY5TpNfL/RGmo1y38hiyO1w3x2jPtt76wmuaJI4DQnOBu21cNXQ2STIUUWg==}
 
   '@types/statuses@2.0.6':
     resolution: {integrity: sha512-xMAgYwceFhRA2zY+XbEA7mxYbA093wdiW8Vu6gZPGWy9cmOyU9XesH1tNcEWsKFd5Vzrqx5T3D38PWx1FIIXkA==}
@@ -2558,31 +2558,31 @@ snapshots:
 
   '@inquirer/ansi@1.0.0': {}
 
-  '@inquirer/confirm@5.1.18(@types/node@22.18.8)':
+  '@inquirer/confirm@5.1.18(@types/node@22.19.15)':
     dependencies:
-      '@inquirer/core': 10.2.2(@types/node@22.18.8)
-      '@inquirer/type': 3.0.8(@types/node@22.18.8)
+      '@inquirer/core': 10.2.2(@types/node@22.19.15)
+      '@inquirer/type': 3.0.8(@types/node@22.19.15)
     optionalDependencies:
-      '@types/node': 22.18.8
+      '@types/node': 22.19.15
 
-  '@inquirer/core@10.2.2(@types/node@22.18.8)':
+  '@inquirer/core@10.2.2(@types/node@22.19.15)':
     dependencies:
       '@inquirer/ansi': 1.0.0
       '@inquirer/figures': 1.0.13
-      '@inquirer/type': 3.0.8(@types/node@22.18.8)
+      '@inquirer/type': 3.0.8(@types/node@22.19.15)
       cli-width: 4.1.0
       mute-stream: 2.0.0
       signal-exit: 4.1.0
       wrap-ansi: 6.2.0
       yoctocolors-cjs: 2.1.3
     optionalDependencies:
-      '@types/node': 22.18.8
+      '@types/node': 22.19.15
 
   '@inquirer/figures@1.0.13': {}
 
-  '@inquirer/type@3.0.8(@types/node@22.18.8)':
+  '@inquirer/type@3.0.8(@types/node@22.19.15)':
     optionalDependencies:
-      '@types/node': 22.18.8
+      '@types/node': 22.19.15
 
   '@jridgewell/gen-mapping@0.3.13':
     dependencies:
@@ -2598,7 +2598,7 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.5
 
-  '@luxass/eslint-config@7.3.0(@typescript-eslint/rule-tester@8.57.0(eslint@10.0.3(jiti@2.6.0))(typescript@5.9.3))(@typescript-eslint/typescript-estree@8.57.0(typescript@5.9.3))(@typescript-eslint/utils@8.57.0(eslint@10.0.3(jiti@2.6.0))(typescript@5.9.3))(@vue/compiler-sfc@3.5.22)(eslint-plugin-format@2.0.1(eslint@10.0.3(jiti@2.6.0)))(eslint@10.0.3(jiti@2.6.0))(typescript@5.9.3)(vitest@4.1.0(@types/node@22.18.8)(msw@2.12.10(@types/node@22.18.8)(typescript@5.9.3))(vite@7.1.7(@types/node@22.18.8)(jiti@2.6.0)(yaml@2.8.2)))':
+  '@luxass/eslint-config@7.3.0(@typescript-eslint/rule-tester@8.57.0(eslint@10.0.3(jiti@2.6.0))(typescript@5.9.3))(@typescript-eslint/typescript-estree@8.57.0(typescript@5.9.3))(@typescript-eslint/utils@8.57.0(eslint@10.0.3(jiti@2.6.0))(typescript@5.9.3))(@vue/compiler-sfc@3.5.22)(eslint-plugin-format@2.0.1(eslint@10.0.3(jiti@2.6.0)))(eslint@10.0.3(jiti@2.6.0))(typescript@5.9.3)(vitest@4.1.0(@types/node@22.19.15)(msw@2.12.10(@types/node@22.19.15)(typescript@5.9.3))(vite@7.1.7(@types/node@22.19.15)(jiti@2.6.0)(yaml@2.8.2)))':
     dependencies:
       '@antfu/install-pkg': 1.1.0
       '@clack/prompts': 1.1.0
@@ -2608,7 +2608,7 @@ snapshots:
       '@stylistic/eslint-plugin': 5.10.0(eslint@10.0.3(jiti@2.6.0))
       '@typescript-eslint/eslint-plugin': 8.57.0(@typescript-eslint/parser@8.57.0(eslint@10.0.3(jiti@2.6.0))(typescript@5.9.3))(eslint@10.0.3(jiti@2.6.0))(typescript@5.9.3)
       '@typescript-eslint/parser': 8.57.0(eslint@10.0.3(jiti@2.6.0))(typescript@5.9.3)
-      '@vitest/eslint-plugin': 1.6.12(eslint@10.0.3(jiti@2.6.0))(typescript@5.9.3)(vitest@4.1.0(@types/node@22.18.8)(msw@2.12.10(@types/node@22.18.8)(typescript@5.9.3))(vite@7.1.7(@types/node@22.18.8)(jiti@2.6.0)(yaml@2.8.2)))
+      '@vitest/eslint-plugin': 1.6.12(eslint@10.0.3(jiti@2.6.0))(typescript@5.9.3)(vitest@4.1.0(@types/node@22.19.15)(msw@2.12.10(@types/node@22.19.15)(typescript@5.9.3))(vite@7.1.7(@types/node@22.19.15)(jiti@2.6.0)(yaml@2.8.2)))
       eslint: 10.0.3(jiti@2.6.0)
       eslint-config-flat-gitignore: 2.2.1(eslint@10.0.3(jiti@2.6.0))
       eslint-flat-config-utils: 3.0.2
@@ -2899,7 +2899,7 @@ snapshots:
 
   '@types/ms@2.1.0': {}
 
-  '@types/node@22.18.8':
+  '@types/node@22.19.15':
     dependencies:
       undici-types: 6.21.0
 
@@ -3012,14 +3012,14 @@ snapshots:
       '@typescript-eslint/types': 8.57.0
       eslint-visitor-keys: 5.0.1
 
-  '@vitest/eslint-plugin@1.6.12(eslint@10.0.3(jiti@2.6.0))(typescript@5.9.3)(vitest@4.1.0(@types/node@22.18.8)(msw@2.12.10(@types/node@22.18.8)(typescript@5.9.3))(vite@7.1.7(@types/node@22.18.8)(jiti@2.6.0)(yaml@2.8.2)))':
+  '@vitest/eslint-plugin@1.6.12(eslint@10.0.3(jiti@2.6.0))(typescript@5.9.3)(vitest@4.1.0(@types/node@22.19.15)(msw@2.12.10(@types/node@22.19.15)(typescript@5.9.3))(vite@7.1.7(@types/node@22.19.15)(jiti@2.6.0)(yaml@2.8.2)))':
     dependencies:
       '@typescript-eslint/scope-manager': 8.57.0
       '@typescript-eslint/utils': 8.57.0(eslint@10.0.3(jiti@2.6.0))(typescript@5.9.3)
       eslint: 10.0.3(jiti@2.6.0)
     optionalDependencies:
       typescript: 5.9.3
-      vitest: 4.1.0(@types/node@22.18.8)(msw@2.12.10(@types/node@22.18.8)(typescript@5.9.3))(vite@7.1.7(@types/node@22.18.8)(jiti@2.6.0)(yaml@2.8.2))
+      vitest: 4.1.0(@types/node@22.19.15)(msw@2.12.10(@types/node@22.19.15)(typescript@5.9.3))(vite@7.1.7(@types/node@22.19.15)(jiti@2.6.0)(yaml@2.8.2))
     transitivePeerDependencies:
       - supports-color
 
@@ -3032,14 +3032,14 @@ snapshots:
       chai: 6.2.2
       tinyrainbow: 3.0.3
 
-  '@vitest/mocker@4.1.0(msw@2.12.10(@types/node@22.18.8)(typescript@5.9.3))(vite@7.1.7(@types/node@22.18.8)(jiti@2.6.0)(yaml@2.8.2))':
+  '@vitest/mocker@4.1.0(msw@2.12.10(@types/node@22.19.15)(typescript@5.9.3))(vite@7.1.7(@types/node@22.19.15)(jiti@2.6.0)(yaml@2.8.2))':
     dependencies:
       '@vitest/spy': 4.1.0
       estree-walker: 3.0.3
       magic-string: 0.30.21
     optionalDependencies:
-      msw: 2.12.10(@types/node@22.18.8)(typescript@5.9.3)
-      vite: 7.1.7(@types/node@22.18.8)(jiti@2.6.0)(yaml@2.8.2)
+      msw: 2.12.10(@types/node@22.19.15)(typescript@5.9.3)
+      vite: 7.1.7(@types/node@22.19.15)(jiti@2.6.0)(yaml@2.8.2)
 
   '@vitest/pretty-format@4.1.0':
     dependencies:
@@ -4057,9 +4057,9 @@ snapshots:
 
   ms@2.1.3: {}
 
-  msw@2.12.10(@types/node@22.18.8)(typescript@5.9.3):
+  msw@2.12.10(@types/node@22.19.15)(typescript@5.9.3):
     dependencies:
-      '@inquirer/confirm': 5.1.18(@types/node@22.18.8)
+      '@inquirer/confirm': 5.1.18(@types/node@22.19.15)
       '@mswjs/interceptors': 0.41.3
       '@open-draft/deferred-promise': 2.2.0
       '@types/statuses': 2.0.6
@@ -4501,7 +4501,7 @@ snapshots:
 
   util-deprecate@1.0.2: {}
 
-  vite@7.1.7(@types/node@22.18.8)(jiti@2.6.0)(yaml@2.8.2):
+  vite@7.1.7(@types/node@22.19.15)(jiti@2.6.0)(yaml@2.8.2):
     dependencies:
       esbuild: 0.25.10
       fdir: 6.5.0(picomatch@4.0.3)
@@ -4510,15 +4510,15 @@ snapshots:
       rollup: 4.52.3
       tinyglobby: 0.2.15
     optionalDependencies:
-      '@types/node': 22.18.8
+      '@types/node': 22.19.15
       fsevents: 2.3.3
       jiti: 2.6.0
       yaml: 2.8.2
 
-  vitest@4.1.0(@types/node@22.18.8)(msw@2.12.10(@types/node@22.18.8)(typescript@5.9.3))(vite@7.1.7(@types/node@22.18.8)(jiti@2.6.0)(yaml@2.8.2)):
+  vitest@4.1.0(@types/node@22.19.15)(msw@2.12.10(@types/node@22.19.15)(typescript@5.9.3))(vite@7.1.7(@types/node@22.19.15)(jiti@2.6.0)(yaml@2.8.2)):
     dependencies:
       '@vitest/expect': 4.1.0
-      '@vitest/mocker': 4.1.0(msw@2.12.10(@types/node@22.18.8)(typescript@5.9.3))(vite@7.1.7(@types/node@22.18.8)(jiti@2.6.0)(yaml@2.8.2))
+      '@vitest/mocker': 4.1.0(msw@2.12.10(@types/node@22.19.15)(typescript@5.9.3))(vite@7.1.7(@types/node@22.19.15)(jiti@2.6.0)(yaml@2.8.2))
       '@vitest/pretty-format': 4.1.0
       '@vitest/runner': 4.1.0
       '@vitest/snapshot': 4.1.0
@@ -4535,10 +4535,10 @@ snapshots:
       tinyexec: 1.0.2
       tinyglobby: 0.2.15
       tinyrainbow: 3.0.3
-      vite: 7.1.7(@types/node@22.18.8)(jiti@2.6.0)(yaml@2.8.2)
+      vite: 7.1.7(@types/node@22.19.15)(jiti@2.6.0)(yaml@2.8.2)
       why-is-node-running: 2.3.0
     optionalDependencies:
-      '@types/node': 22.18.8
+      '@types/node': 22.19.15
     transitivePeerDependencies:
       - msw
 
