@@ -223,6 +223,7 @@ test("should handle path parameters with type safety", async () => {
 ```
 
 Both approaches support:
+
 - Single method endpoints
 - Multiple methods on the same URL
 - Path parameters
@@ -290,7 +291,7 @@ const mockFetch = createMockFetch({ mswServer: server });
 const typedMock = createTypedMockFetch<MyURLs>(mockFetch);
 
 // Type-safe - enforces User[] response
-typedMock("GET", "/api/users", () => HttpResponse.json([...]));
+typedMock("GET", "/api/users", () => HttpResponse.json([...yourResponse]));
 
 // Type error - wrong response type
 typedMock("GET", "/api/users", () => HttpResponse.json("wrong"));
