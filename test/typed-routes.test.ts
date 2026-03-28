@@ -237,3 +237,33 @@ describe("typed Wrapper - Runtime Tests", () => {
     expect(postData).toEqual({ id: "1", created: true });
   });
 });
+
+function assertTypedMockFetchTypeSignatures() {
+  const typedMock = createTypedMockFetch<MyURLs>(mockFetch);
+
+  typedMock([
+    ["GET", `${base}/api/products`, () => {
+      return HttpResponse.json([{ id: "1", name: "Widget", price: 9.99 }]);
+    }],
+  ]);
+
+  // @ts-expect-error runtime requires both url and resolver for single-method registration
+  typedMock("GET");
+
+  // @ts-expect-error runtime requires a resolver for single-method registration
+  typedMock("GET", `${base}/typed-wrapper/missing-resolver`);
+
+  // @ts-expect-error runtime requires a resolver for multi-method registration
+  typedMock(["GET", "POST"], `${base}/typed-wrapper/missing-resolver`);
+
+  // @ts-expect-error runtime requires a resolver for batch registration
+  typedMock([
+    ["GET", `${base}/typed-wrapper/batch-missing-resolver`],
+  ]);
+}
+
+describe("typed Wrapper - Type Signatures", () => {
+  it("keeps typed wrapper call shapes aligned with runtime validation", () => {
+    expect(assertTypedMockFetchTypeSignatures).toBeTypeOf("function");
+  });
+});

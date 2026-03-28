@@ -74,11 +74,25 @@ export interface TypedMockFetchFn<Registry extends Record<string, any>> {
     endpoints: TypedEndpointsBatchWrapper<Registry, Endpoints> & Endpoints
   ): void;
 
-  // Overload 4: Fallback for untyped URLs (not in registry)
+  // Overload 4: Safe fallback for untyped single-method URLs (not in registry)
   (
-    methodsOrEndpoints: any,
-    url?: string,
-    resolver?: HttpResponseResolver
+    method: HTTPMethod,
+    url: string,
+    resolver: HttpResponseResolver
+  ): void;
+
+  // Overload 5: Safe fallback for untyped multi-method URLs (not in registry)
+  (
+    methods: NonEmptyArray<HTTPMethod>,
+    url: string,
+    resolver: HttpResponseResolver
+  ): void;
+
+  // Overload 6: Safe fallback for batch registration when tuple inference cannot preserve typed resolver bodies
+  (
+    endpoints: ReadonlyArray<
+      readonly [NonEmptyArray<HTTPMethod> | HTTPMethod, string, HttpResponseResolver]
+    >
   ): void;
 }
 

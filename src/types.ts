@@ -110,13 +110,10 @@ export interface MockFetchFn {
     endpoints: TypedEndpointsBatch<Endpoints> & Endpoints
   ): void;
 
-  // Overload 4: Generic catch-all (for type system fallback)
+  // Overload 4: Safe batch fallback when tuple inference cannot preserve typed resolver bodies
   (
-    methodsOrEndpoints:
-      | NonEmptyArray<HTTPMethod>
-      | HTTPMethod
-      | ReadonlyArray<readonly [any, string, any]>,
-    url?: string,
-    resolver?: HttpResponseResolver
+    endpoints: ReadonlyArray<
+      readonly [NonEmptyArray<HTTPMethod> | HTTPMethod, string, HttpResponseResolver]
+    >
   ): void;
 }
