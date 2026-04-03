@@ -48,7 +48,11 @@ export function createMockFetch(options: CreateMockFetchOptions): MockFetchFn {
     url?: string,
     resolver?: HttpResponseResolver,
   ): void => {
-    if (Array.isArray(methodsOrEndpoints) && methodsOrEndpoints.length > 0 && Array.isArray(methodsOrEndpoints[0])) {
+    if (
+      Array.isArray(methodsOrEndpoints) &&
+      methodsOrEndpoints.length > 0 &&
+      Array.isArray(methodsOrEndpoints[0])
+    ) {
       // handle batch registration
       const endpoints = methodsOrEndpoints as [
         NonEmptyArray<HTTPMethod> | HTTPMethod,

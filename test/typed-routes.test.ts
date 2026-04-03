@@ -1,13 +1,7 @@
 import { HttpResponse } from "msw";
 import { setupServer } from "msw/node";
-import {
-  afterAll,
-  afterEach,
-  beforeAll,
-  describe,
-  expect,
-  it,
-} from "vitest";
+import { afterAll, afterEach, beforeAll, describe, expect, it } from "vitest";
+
 import { createMockFetch, createTypedMockFetch } from "../src";
 
 const base = "http://localhost" as const;
@@ -106,12 +100,20 @@ describe("module Augmentation - Runtime Tests", () => {
 
   it("should handle batch registration with typed endpoints", async () => {
     mockFetch([
-      ["GET", `${base}/api/users`, () => {
-        return HttpResponse.json([{ id: 1, name: "John" }]);
-      }],
-      ["POST", `${base}/api/users`, () => {
-        return HttpResponse.json({ id: 1, created: true });
-      }],
+      [
+        "GET",
+        `${base}/api/users`,
+        () => {
+          return HttpResponse.json([{ id: 1, name: "John" }]);
+        },
+      ],
+      [
+        "POST",
+        `${base}/api/users`,
+        () => {
+          return HttpResponse.json({ id: 1, created: true });
+        },
+      ],
     ]);
 
     const getRes = await fetch(`${base}/api/users`);
@@ -124,8 +126,7 @@ describe("module Augmentation - Runtime Tests", () => {
   });
 
   it("should allow untyped URLs", async () => {
-    mockFetch("GET", `${base}/untyped`, () =>
-      HttpResponse.json({ anything: "goes" }));
+    mockFetch("GET", `${base}/untyped`, () => HttpResponse.json({ anything: "goes" }));
 
     const res = await fetch(`${base}/untyped`);
     const data = await res.json();
@@ -220,12 +221,20 @@ describe("typed Wrapper - Runtime Tests", () => {
 
   it("should handle batch registration", async () => {
     typedMock([
-      ["GET", `${base}/api/products`, () => {
-        return HttpResponse.json([{ id: "1", name: "Widget", price: 9.99 }]);
-      }],
-      ["POST", `${base}/api/products`, () => {
-        return HttpResponse.json({ id: "1", created: true });
-      }],
+      [
+        "GET",
+        `${base}/api/products`,
+        () => {
+          return HttpResponse.json([{ id: "1", name: "Widget", price: 9.99 }]);
+        },
+      ],
+      [
+        "POST",
+        `${base}/api/products`,
+        () => {
+          return HttpResponse.json({ id: "1", created: true });
+        },
+      ],
     ]);
 
     const getRes = await fetch(`${base}/api/products`);
@@ -242,9 +251,13 @@ function assertTypedMockFetchTypeSignatures() {
   const typedMock = createTypedMockFetch<MyURLs>(mockFetch);
 
   typedMock([
-    ["GET", `${base}/api/products`, () => {
-      return HttpResponse.json([{ id: "1", name: "Widget", price: 9.99 }]);
-    }],
+    [
+      "GET",
+      `${base}/api/products`,
+      () => {
+        return HttpResponse.json([{ id: "1", name: "Widget", price: 9.99 }]);
+      },
+    ],
   ]);
 
   // @ts-expect-error runtime requires both url and resolver for single-method registration
@@ -257,9 +270,7 @@ function assertTypedMockFetchTypeSignatures() {
   typedMock(["GET", "POST"], `${base}/typed-wrapper/missing-resolver`);
 
   // @ts-expect-error runtime requires a resolver for batch registration
-  typedMock([
-    ["GET", `${base}/typed-wrapper/batch-missing-resolver`],
-  ]);
+  typedMock([["GET", `${base}/typed-wrapper/batch-missing-resolver`]]);
 }
 
 describe("typed Wrapper - Type Signatures", () => {

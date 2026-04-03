@@ -35,10 +35,7 @@ export type DefaultBodyType = any;
  * Extract response type from URLRegistry based on HTTP method and URL.
  * Falls back to DefaultBodyType for unregistered URLs or methods.
  */
-type GetResponseType<
-  Method extends HTTPMethod,
-  URL extends string,
-> = URL extends keyof URLRegistry
+type GetResponseType<Method extends HTTPMethod, URL extends string> = URL extends keyof URLRegistry
   ? Method extends keyof URLRegistry[URL]
     ? URLRegistry[URL][Method]
     : DefaultBodyType
@@ -48,9 +45,7 @@ type GetResponseType<
  * Allows both registered URLs from URLRegistry and any arbitrary string.
  * Uses the `string & {}` pattern to enable literal type inference while accepting all strings.
  */
-type RegisteredURL = keyof URLRegistry extends never
-  ? string
-  : keyof URLRegistry | (string & {});
+type RegisteredURL = keyof URLRegistry extends never ? string : keyof URLRegistry | (string & {});
 
 /**
  * Type-aware HTTP response resolver that constrains response body based on URL and method.
@@ -59,11 +54,7 @@ type TypedHttpResponseResolver<
   Method extends HTTPMethod,
   URL extends string,
   Params extends PathParams = PathParams,
-> = HttpResponseResolver<
-  Params,
-  any,
-  GetResponseType<Method, URL>
->;
+> = HttpResponseResolver<Params, any, GetResponseType<Method, URL>>;
 
 /**
  * Helper type for batch endpoint registration that preserves individual URL and method types.
@@ -84,36 +75,32 @@ type TypedEndpointsBatch<T extends ReadonlyArray<readonly [any, string, any]>> =
 
 export interface MockFetchFn {
   // Overload 1: Single method + URL
-  <
-    Method extends HTTPMethod,
-    URL extends RegisteredURL,
-  >(
+  <Method extends HTTPMethod, URL extends RegisteredURL>(
     method: Method,
     url: URL,
-    resolver: TypedHttpResponseResolver<Method, URL>
+    resolver: TypedHttpResponseResolver<Method, URL>,
   ): void;
 
   // Overload 2: Multiple methods + URL
-  <
-    Methods extends NonEmptyArray<HTTPMethod>,
-    URL extends RegisteredURL,
-  >(
+  <Methods extends NonEmptyArray<HTTPMethod>, URL extends RegisteredURL>(
     methods: Methods,
     url: URL,
-    resolver: TypedHttpResponseResolver<Methods[number], URL>
+    resolver: TypedHttpResponseResolver<Methods[number], URL>,
   ): void;
 
   // Overload 3: Batch registration
-  <const Endpoints extends ReadonlyArray<
-    readonly [NonEmptyArray<HTTPMethod> | HTTPMethod, string, any]
-  >>(
-    endpoints: TypedEndpointsBatch<Endpoints> & Endpoints
+  <
+    const Endpoints extends ReadonlyArray<
+      readonly [NonEmptyArray<HTTPMethod> | HTTPMethod, string, any]
+    >,
+  >(
+    endpoints: TypedEndpointsBatch<Endpoints> & Endpoints,
   ): void;
 
   // Overload 4: Safe batch fallback when tuple inference cannot preserve typed resolver bodies
   (
     endpoints: ReadonlyArray<
       readonly [NonEmptyArray<HTTPMethod> | HTTPMethod, string, HttpResponseResolver]
-    >
+    >,
   ): void;
 }

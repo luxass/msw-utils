@@ -356,9 +356,13 @@ function assertMockFetchTypeSignatures() {
   });
 
   mockFetch([
-    ["GET", `${base}/type-safe/batch`, () => {
-      return HttpResponse.json({ ok: true });
-    }],
+    [
+      "GET",
+      `${base}/type-safe/batch`,
+      () => {
+        return HttpResponse.json({ ok: true });
+      },
+    ],
   ]);
 
   // @ts-expect-error runtime requires both url and resolver for single-method registration
