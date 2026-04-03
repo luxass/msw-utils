@@ -22,7 +22,6 @@ afterEach(() => {
 });
 afterAll(() => server.close());
 
-// eslint-disable-next-line test/prefer-lowercase-title
 describe("HEAD handling", () => {
   it("returns 200 with empty body when resolver is undefined", async () => {
     mockFetch("HEAD", `${base}/head/empty`, async () => undefined as any);
