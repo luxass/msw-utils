@@ -1,8 +1,13 @@
 import type { HttpResponseResolver } from "msw";
-import type { HTTPMethod } from "./types";
 import { http, HttpResponse } from "msw";
 
-export function createHandlersFromMethods(methods: readonly HTTPMethod[], url: string, resolver: HttpResponseResolver) {
+import type { HTTPMethod } from "./types";
+
+export function createHandlersFromMethods(
+  methods: readonly HTTPMethod[],
+  url: string,
+  resolver: HttpResponseResolver,
+) {
   return methods.map((method) => {
     // For HEAD requests, execute the resolver and return response without body
     if (method === "HEAD") {

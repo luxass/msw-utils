@@ -1,14 +1,7 @@
 import { HttpResponse } from "msw";
 import { setupServer } from "msw/node";
-import {
-  afterAll,
-  afterEach,
-  beforeAll,
-  describe,
-  expect,
-  it,
-  vi,
-} from "vitest";
+import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from "vitest";
+
 import { createMockFetch } from "../src";
 
 const server = setupServer();
@@ -32,12 +25,16 @@ describe("HEAD handling", () => {
   });
 
   it("copies status/statusText/headers from HttpResponse", async () => {
-    mockFetch("HEAD", `${base}/head/copy`, async () =>
-      new HttpResponse("ignored", {
-        status: 204,
-        statusText: "No Content",
-        headers: { "X-Test": "1" },
-      }));
+    mockFetch(
+      "HEAD",
+      `${base}/head/copy`,
+      async () =>
+        new HttpResponse("ignored", {
+          status: 204,
+          statusText: "No Content",
+          headers: { "X-Test": "1" },
+        }),
+    );
 
     const res = await fetch(`${base}/head/copy`, { method: "HEAD" });
     expect(res.status).toBe(204);
@@ -62,7 +59,9 @@ describe("HEAD handling", () => {
 
 describe("non-HEAD handler mapping", () => {
   it("maps PATCH to http.patch and responds", async () => {
-    mockFetch("PATCH", `${base}/utils/patch`, () => HttpResponse.json({ ok: true }, { status: 202 }));
+    mockFetch("PATCH", `${base}/utils/patch`, () =>
+      HttpResponse.json({ ok: true }, { status: 202 }),
+    );
 
     const res = await fetch(`${base}/utils/patch`, { method: "PATCH" });
     expect(res.status).toBe(202);

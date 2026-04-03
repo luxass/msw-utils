@@ -1,14 +1,7 @@
 import { HttpResponse } from "msw";
 import { setupServer } from "msw/node";
-import {
-  afterAll,
-  afterEach,
-  beforeAll,
-  describe,
-  expect,
-  it,
-  vi,
-} from "vitest";
+import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from "vitest";
+
 import { createMockFetch } from "../src";
 
 const server = setupServer();
@@ -40,12 +33,20 @@ describe("createMockFetch - Single Method Approach", () => {
   it("registers batch endpoints with single methods", async () => {
     const spy = vi.spyOn(server, "use");
     mockFetch([
-      ["GET", `${base}/batch/a`, () => {
-        return HttpResponse.json({ a: true });
-      }],
-      ["POST", `${base}/batch/b`, () => {
-        return HttpResponse.json({ b: true });
-      }],
+      [
+        "GET",
+        `${base}/batch/a`,
+        () => {
+          return HttpResponse.json({ a: true });
+        },
+      ],
+      [
+        "POST",
+        `${base}/batch/b`,
+        () => {
+          return HttpResponse.json({ b: true });
+        },
+      ],
     ]);
 
     expect(spy).toHaveBeenCalledTimes(1);
@@ -121,7 +122,9 @@ describe("createMockFetch - Single Method Approach", () => {
     expect(spy).toHaveBeenCalledTimes(1);
     expect(spy.mock.calls[0]).toHaveLength(1);
 
-    await expect(() => fetch(`${base}/users/123/posts/456`)).rejects.toThrow(/\[MSW\] Cannot bypass a request when using the "error" strategy for the "onUnhandledRequest" option\./);
+    await expect(() => fetch(`${base}/users/123/posts/456`)).rejects.toThrow(
+      /\[MSW\] Cannot bypass a request when using the "error" strategy for the "onUnhandledRequest" option\./,
+    );
   });
 
   it("throws on missing url/resolver for single method", () => {
@@ -248,7 +251,9 @@ describe("createMockFetch - Array Method Approach", () => {
     expect(spy).toHaveBeenCalledTimes(1);
     expect(spy.mock.calls[0]).toHaveLength(2);
 
-    await expect(() => fetch(`${base}/users/123/posts/456`)).rejects.toThrow(/\[MSW\] Cannot bypass a request when using the "error" strategy for the "onUnhandledRequest" option\./);
+    await expect(() => fetch(`${base}/users/123/posts/456`)).rejects.toThrow(
+      /\[MSW\] Cannot bypass a request when using the "error" strategy for the "onUnhandledRequest" option\./,
+    );
   });
 
   it("registers batch endpoints with array methods", async () => {
@@ -304,9 +309,13 @@ describe("createMockFetch - Mixed Batch Operations", () => {
   it("registers batch endpoints (mix of single and multi-method)", async () => {
     const spy = vi.spyOn(server, "use");
     mockFetch([
-      ["GET", `${base}/batch/a`, () => {
-        return HttpResponse.json({ a: true });
-      }],
+      [
+        "GET",
+        `${base}/batch/a`,
+        () => {
+          return HttpResponse.json({ a: true });
+        },
+      ],
       [
         ["GET", "DELETE"],
         `${base}/batch/b`,

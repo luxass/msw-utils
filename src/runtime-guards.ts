@@ -22,7 +22,6 @@ import type { MSWError } from "./errors";
  */
 export function isMSWError(error: unknown): error is MSWError {
   return (
-    error instanceof Error
-    && (error.name === "InternalError" || error.message.startsWith("[MSW]"))
+    error instanceof Error && (error.name === "InternalError" || error.message.startsWith("[MSW]"))
   );
 }

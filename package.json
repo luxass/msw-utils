@@ -2,33 +2,35 @@
   "name": "@luxass/msw-utils",
   "version": "0.6.1",
   "description": "Utilities for working with MSW",
-  "type": "module",
+  "keywords": [
+    "msw",
+    "utils"
+  ],
+  "homepage": "https://github.com/luxass/msw-utils#readme",
+  "bugs": "https://github.com/luxass/msw-utils/issues",
+  "license": "MIT",
   "author": {
     "name": "Lucas Nørgård",
     "email": "lucasnrgaard@gmail.com",
     "url": "https://luxass.dev"
   },
-  "packageManager": "pnpm@10.33.0",
-  "license": "MIT",
-  "homepage": "https://github.com/luxass/msw-utils#readme",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/luxass/msw-utils.git"
   },
-  "bugs": "https://github.com/luxass/msw-utils/issues",
-  "keywords": [
-    "msw",
-    "utils"
+  "files": [
+    "dist"
   ],
+  "type": "module",
+  "types": "./dist/index.d.mts",
   "exports": {
     ".": "./dist/index.mjs",
     "./runtime-guards": "./dist/runtime-guards.mjs",
     "./package.json": "./package.json"
   },
-  "types": "./dist/index.d.mts",
-  "files": [
-    "dist"
-  ],
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "build": "tsdown",
     "dev": "tsdown --watch",
@@ -38,12 +40,6 @@
     "typecheck": "tsc --noEmit",
     "lint": "oxlint",
     "lint:fix": "oxlint --fix"
-  },
-  "publishConfig": {
-    "access": "public"
-  },
-  "peerDependencies": {
-    "msw": ">=2.11.0 <3.0.0"
   },
   "devDependencies": {
     "@types/node": "catalog:types",
@@ -55,5 +51,9 @@
     "tsdown": "catalog:dev",
     "typescript": "catalog:dev",
     "vitest": "catalog:dev"
-  }
+  },
+  "peerDependencies": {
+    "msw": ">=2.11.0 <3.0.0"
+  },
+  "packageManager": "pnpm@10.33.0"
 }
