@@ -20,7 +20,7 @@ catalogs:
     vitest: 4.1.2
 
   types:
-    "@types/node": 22.19.15
+    "@types/node": 24.13.2
 minimumReleaseAgeExclude:
   # Renovate security update: pnpm@11.5.3 || 11.8.0
   - pnpm@11.5.3 || 11.8.0
