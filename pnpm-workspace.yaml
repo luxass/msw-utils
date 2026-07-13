@@ -17,7 +17,7 @@ catalogs:
     publint: 0.3.18
     tsdown: 0.21.7
     typescript: 6.0.2
-    vitest: 4.1.2
+    vitest: 4.1.10
 
   types:
     "@types/node": 22.19.15
