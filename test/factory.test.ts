@@ -345,3 +345,44 @@ describe("createMockFetch - Mixed Batch Operations", () => {
     expect(() => mockFetch([] as any)).toThrow("invalid arguments for mockFetch");
   });
 });
+
+function assertMockFetchTypeSignatures() {
+  mockFetch("GET", `${base}/type-safe/single`, () => {
+    return HttpResponse.json({ ok: true });
+  });
+
+  mockFetch(["GET", "POST"], `${base}/type-safe/multi`, ({ request }) => {
+    return HttpResponse.json({ method: request.method });
+  });
+
+  mockFetch([
+    [
+      "GET",
+      `${base}/type-safe/batch`,
+      () => {
+        return HttpResponse.json({ ok: true });
+      },
+    ],
+  ]);
+
+  // @ts-expect-error runtime requires both url and resolver for single-method registration
+  mockFetch("GET");
+
+  // @ts-expect-error runtime requires a resolver for single-method registration
+  mockFetch("GET", `${base}/type-safe/missing-resolver`);
+
+  // @ts-expect-error runtime requires a resolver for multi-method registration
+  mockFetch(["GET", "POST"], `${base}/type-safe/missing-resolver`);
+
+  // @ts-expect-error runtime requires a resolver for batch registration
+  mockFetch([
+    ["GET", `${base}/type-safe/batch-missing-resolver`],
+    [["GET", "POST"], `${base}/type-safe/batch-multi`],
+  ]);
+}
+
+describe("createMockFetch - Type Signatures", () => {
+  it("keeps compile-time signatures aligned with runtime validation", () => {
+    expect(assertMockFetchTypeSignatures).toBeTypeOf("function");
+  });
+});
