@@ -16,7 +16,7 @@ catalogs:
     oxlint-tsgolint: 0.19.0
     publint: 0.3.18
     tsdown: 0.21.7
-    typescript: 6.0.2
+    typescript: 7.0.2
     vitest: 4.1.2
 
   types:
