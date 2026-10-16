@@ -41,7 +41,7 @@ export function createHeadHandler(url: string, resolver: HttpResponseResolver) {
   });
 }
 
-const OPENAPI_PATH_PARAM_RE = /\{([^}]+)\}/g;
+const OPENAPI_PATH_PARAM_RE = /\{([^}]+)\}/gu;
 
 export function replaceOpenAPIPathParamsWithMSWParams(url: string): string {
   OPENAPI_PATH_PARAM_RE.lastIndex = 0;

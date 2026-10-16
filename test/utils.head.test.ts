@@ -9,16 +9,22 @@ const server = setupServer();
 const mockFetch = createMockFetch({ mswServer: server });
 const base = "http://localhost";
 
-beforeAll(() => server.listen(listenOptions));
+beforeAll(() => {
+  server.listen(listenOptions);
+});
 afterEach(() => {
   server.resetHandlers();
   vi.restoreAllMocks();
 });
-afterAll(() => server.close());
+afterAll(() => {
+  server.close();
+});
 
 describe("HEAD handling", () => {
   it("returns 200 with empty body when resolver is undefined", async () => {
-    mockFetch("HEAD", `${base}/head/empty`, async () => undefined as any);
+    mockFetch("HEAD", `${base}/head/empty`, async () => {
+      // Intentionally return no response to exercise the HEAD fallback.
+    });
 
     const res = await fetch(`${base}/head/empty`, { method: "HEAD" });
     expect(res.status).toBe(200);
