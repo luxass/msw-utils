@@ -2,7 +2,8 @@ import { HttpResponse } from "msw";
 import { setupServer } from "msw/node";
 import { afterAll, afterEach, beforeAll, describe, expect, it } from "vitest";
 
-import { createMockFetch, createTypedMockFetch } from "../src";
+import { createMockFetch, createTypedMockFetch, type URLRegistry } from "../src";
+import { listenOptions } from "./helpers/msw";
 
 const base = "http://localhost" as const;
 
@@ -22,9 +23,15 @@ declare module "../src" {
 const server = setupServer();
 const mockFetch = createMockFetch({ mswServer: server });
 
-beforeAll(() => server.listen({ onUnhandledRequest: "error" }));
-afterEach(() => server.resetHandlers());
-afterAll(() => server.close());
+beforeAll(() => {
+  server.listen(listenOptions);
+});
+afterEach(() => {
+  server.resetHandlers();
+});
+afterAll(() => {
+  server.close();
+});
 
 describe("module Augmentation - Runtime Tests", () => {
   it("should handle typed GET endpoint", async () => {
@@ -104,14 +111,19 @@ describe("module Augmentation - Runtime Tests", () => {
         "GET",
         `${base}/api/users`,
         () => {
-          return HttpResponse.json([{ id: 1, name: "John" }]);
+          return HttpResponse.json<URLRegistry["http://localhost/api/users"]["GET"]>([
+            { id: 1, name: "John" },
+          ]);
         },
       ],
       [
         "POST",
         `${base}/api/users`,
         () => {
-          return HttpResponse.json({ id: 1, created: true });
+          return HttpResponse.json<URLRegistry["http://localhost/api/users"]["POST"]>({
+            id: 1,
+            created: true,
+          });
         },
       ],
     ]);
@@ -148,6 +160,10 @@ interface MyURLs {
 
 describe("typed Wrapper - Runtime Tests", () => {
   const typedMock = createTypedMockFetch<MyURLs>(mockFetch);
+
+  it("returns the original registration function", () => {
+    expect(typedMock).toBe(mockFetch);
+  });
 
   it("should handle typed GET endpoint", async () => {
     typedMock("GET", `${base}/api/products`, () => {
@@ -225,14 +241,19 @@ describe("typed Wrapper - Runtime Tests", () => {
         "GET",
         `${base}/api/products`,
         () => {
-          return HttpResponse.json([{ id: "1", name: "Widget", price: 9.99 }]);
+          return HttpResponse.json<MyURLs["http://localhost/api/products"]["GET"]>([
+            { id: "1", name: "Widget", price: 9.99 },
+          ]);
         },
       ],
       [
         "POST",
         `${base}/api/products`,
         () => {
-          return HttpResponse.json({ id: "1", created: true });
+          return HttpResponse.json<MyURLs["http://localhost/api/products"]["POST"]>({
+            id: "1",
+            created: true,
+          });
         },
       ],
     ]);
@@ -255,10 +276,40 @@ function assertTypedMockFetchTypeSignatures() {
       "GET",
       `${base}/api/products`,
       () => {
-        return HttpResponse.json([{ id: "1", name: "Widget", price: 9.99 }]);
+        return HttpResponse.json<MyURLs["http://localhost/api/products"]["GET"]>([
+          { id: "1", name: "Widget", price: 9.99 },
+        ]);
       },
     ],
   ]);
+
+  typedMock("GET", `${base}/unregistered`, () => HttpResponse.json({ unrestricted: true }));
+
+  const isolatedMock = createTypedMockFetch<{
+    "http://localhost/api/users": { GET: { source: "instance" } };
+  }>(mockFetch);
+  isolatedMock("GET", `${base}/api/users`, () => HttpResponse.json({ source: "instance" }));
+
+  // @ts-expect-error the instance registry replaces the global response type for this URL
+  isolatedMock("GET", `${base}/api/users`, () => HttpResponse.json([{ id: 1, name: "John" }]));
+
+  // @ts-expect-error registered GET routes require the declared array response
+  mockFetch("GET", `${base}/api/users`, () => HttpResponse.json({ wrongShape: true }));
+
+  // @ts-expect-error registered routes keep their response type in batches
+  mockFetch([["GET", `${base}/api/users`, () => HttpResponse.json({ wrongShape: true })]]);
+
+  // @ts-expect-error a multi-method resolver must return one of its registered response types
+  mockFetch(["GET", "POST"], `${base}/api/users`, () => HttpResponse.json({ wrongShape: true }));
+
+  // @ts-expect-error the instance registry requires an array for GET products
+  typedMock("GET", `${base}/api/products`, () => HttpResponse.json({ wrongShape: true }));
+
+  // @ts-expect-error the instance registry also constrains batch response bodies
+  typedMock([["GET", `${base}/api/products`, () => HttpResponse.json({ wrongShape: true })]]);
+
+  // @ts-expect-error instance-specific multi-method resolvers cannot return unrelated bodies
+  typedMock(["GET", "POST"], `${base}/api/products`, () => HttpResponse.json({ wrongShape: true }));
 
   // @ts-expect-error runtime requires both url and resolver for single-method registration
   typedMock("GET");

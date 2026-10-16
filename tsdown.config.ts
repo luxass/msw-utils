@@ -7,6 +7,7 @@ export default defineConfig({
   },
   exports: true,
   format: ["esm"],
+  target: "node24",
   clean: true,
   dts: true,
   treeshake: true,

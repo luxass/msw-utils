@@ -44,16 +44,23 @@
   "devDependencies": {
     "@types/node": "catalog:types",
     "msw": "catalog:dev",
+    "msw-2": "catalog:msw-versions",
+    "msw-2-min": "catalog:msw-versions",
+    "msw-3": "catalog:msw-versions",
+    "msw-3-min": "catalog:msw-versions",
     "oxfmt": "catalog:dev",
     "oxlint": "catalog:dev",
     "oxlint-tsgolint": "catalog:dev",
     "publint": "catalog:dev",
     "tsdown": "catalog:dev",
     "typescript": "catalog:dev",
-    "vitest": "catalog:dev"
+    "vitest": "catalog:testing"
   },
   "peerDependencies": {
-    "msw": ">=2.11.0 <3.0.0"
+    "msw": ">=2.11.0 <3.0.0 || >=3.0.0 <4.0.0"
   },
-  "packageManager": "pnpm@10.33.0"
+  "engines": {
+    "node": ">=24.11.0"
+  },
+  "packageManager": "pnpm@12.11.2"
 }

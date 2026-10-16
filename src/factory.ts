@@ -1,11 +1,11 @@
 import type { HttpResponseResolver } from "msw";
-import type { SetupServerApi } from "msw/node";
+import type { setupServer } from "msw/node";
 
 import type { HTTPMethod, MockFetchFn, NonEmptyArray } from "./types";
 import { createHandlersFromMethods, replaceOpenAPIPathParamsWithMSWParams } from "./utils";
 
 export interface CreateMockFetchOptions {
-  mswServer: SetupServerApi;
+  mswServer: Pick<ReturnType<typeof setupServer>, "use">;
 
   /**
    * Whether or not to replace OpenAPI Path Parameters
@@ -44,7 +44,7 @@ export function createMockFetch(options: CreateMockFetchOptions): MockFetchFn {
   }
 
   const mockFetch: MockFetchFn = (
-    methodsOrEndpoints: any,
+    methodsOrEndpoints: unknown,
     url?: string,
     resolver?: HttpResponseResolver,
   ): void => {

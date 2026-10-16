@@ -10,12 +10,16 @@ export default defineConfig({
     correctness: "error",
     perf: "error",
     suspicious: "error",
+    pedantic: "warn",
   },
   rules: {
     "eslint/no-await-in-loop": "off",
     "no-console": ["error", { allow: ["error"] }],
     "no-shadow": "off",
+    "eslint/eqeqeq": ["warn", "always", { null: "ignore" }],
+    "typescript/no-explicit-any": "error",
     "typescript/no-unnecessary-boolean-literal-compare": "off",
+    "typescript/prefer-readonly-parameter-types": "off",
     "typescript/no-unsafe-type-assertion": "off",
     curly: "off",
   },
@@ -24,6 +28,17 @@ export default defineConfig({
       files: [".github/**/*", "scripts/**/*"],
       rules: {
         "no-console": "off",
+      },
+    },
+    {
+      // Tests exercise invalid inputs and use async resolvers without await.
+      files: ["test/**/*"],
+      rules: {
+        "eslint/max-lines": "off",
+        "eslint/max-lines-per-function": "off",
+        "eslint/require-await": "off",
+        "typescript/require-await": "off",
+        "typescript/no-explicit-any": "off",
       },
     },
   ],
