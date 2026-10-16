@@ -18,5 +18,6 @@ jobs:
       contents: read
     with:
       node-version: "24"
+      post-build-script: "test"
       fmt: true
       fmt-script: "fmt:check"

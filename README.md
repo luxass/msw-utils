@@ -11,8 +11,11 @@ A collection of utilities for working with [MSW (Mock Service Worker)](https://m
 ## Installation
 
 ```bash
-npm install @luxass/msw-utils
+npm install @luxass/msw-utils msw
 ```
+
+Requires Node.js >=24.11.0 and MSW `>=2.11.0 <3.0.0 || >=3.0.0 <4.0.0`.
+MSW v3 requires TypeScript >=5.9 when using TypeScript.
 
 ## Usage
 
@@ -34,9 +37,16 @@ import { afterAll, afterEach, beforeAll } from "vitest";
 
 import { server } from "./test/utils.js";
 
-beforeAll(() => server.listen({ onUnhandledRequest: "error" }));
+// MSW v3
+beforeAll(() => server.listen({ onUnhandledFrame: "error" }));
 afterAll(() => server.close());
 afterEach(() => server.resetHandlers());
+```
+
+For MSW v2, replace the `beforeAll` call with:
+
+```ts
+beforeAll(() => server.listen({ onUnhandledRequest: "error" }));
 ```
 
 ```ts
@@ -79,7 +89,8 @@ import { mockFetch, server } from "./test/utils.js";
 
 vi.stubGlobal("mockFetch", mockFetch);
 
-beforeAll(() => server.listen({ onUnhandledRequest: "error" }));
+// MSW v3. With MSW v2, use onUnhandledRequest instead of onUnhandledFrame.
+beforeAll(() => server.listen({ onUnhandledFrame: "error" }));
 afterAll(() => server.close());
 afterEach(() => server.resetHandlers());
 ```
@@ -135,6 +146,32 @@ Register multiple endpoints at once.
 
 - `endpoints`: Array of `[methods, url, resolver]` tuples
 
+## MSW version differences
+
+`mockFetch` uses the installed MSW version. It does not change URL matching or resolver values to emulate another version.
+
+Plain named parameters such as `/users/:id` work on both majors. Set `replaceOpenAPIPathParams: true` to convert `/users/{id}` to `/users/:id`.
+
+MSW v3 replaces its URL matcher. Two differences affect string patterns:
+
+- Repeated parameters such as `/files/:parts+` and `/files/:parts*` return arrays in v2 and slash-separated strings in v3. For `/files/a/b`, `params.parts` is `["a", "b"]` in v2 and `"a/b"` in v3.
+- Inline regex constraints such as `/users/:id(\d+)` match `/users/123` in v2 but not in v3. Plain `/users/:id` still matches in both. This utility does not remove numeric constraints or accept `RegExp` URL arguments.
+
+MSW v3 does not manage a cookie store in Node.js. Use the `cookies` resolver argument for cookie-based logic, not `request.headers.get("cookie")`.
+
+See the [MSW v3 migration guide](https://mswjs.io/docs/migrations/2.x-to-3.x) for other upstream changes.
+
+## Testing
+
+The shared integration suite runs against MSW 2.11.0, 2.15.0, 3.0.0, and 3.0.3 in isolated Vitest projects. Runtime-guard unit tests run once.
+
+```bash
+pnpm test
+pnpm test --project msw-2
+pnpm test --project msw-3
+pnpm test --project msw-2-min --project msw-3-min
+```
+
 ## Runtime Guards
 
 The package also exports runtime type guards for MSW-specific types. Import from `@luxass/msw-utils/runtime-guards`:
@@ -142,6 +179,8 @@ The package also exports runtime type guards for MSW-specific types. Import from
 ### `isMSWError(error)`
 
 Checks if an error is an MSW internal error. MSW throws internal errors with the name `"InternalError"` and prefixes error messages with `"[MSW]"`.
+
+With MSW v3 in Node.js, a blocked `fetch()` rejects with a `TypeError` whose `cause` is the MSW error. Pass that cause to `isMSWError`. The Fetch wrapper itself is not an MSW error.
 
 #### Parameters
 
