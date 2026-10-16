@@ -1,5 +1,5 @@
 ignoreScripts: true
-minimumReleaseAge: 5760
+minimumReleaseAge: 7200
 trustPolicy: no-downgrade
 catalogMode: prefer
 strictDepBuilds: true
@@ -11,16 +11,16 @@ overrides:
 catalogs:
   dev:
     msw: 2.12.14
-    oxfmt: 0.43.0
-    oxlint: 1.58.0
-    oxlint-tsgolint: 0.19.0
-    publint: 0.3.18
-    tsdown: 0.21.7
-    typescript: 6.0.2
-    vitest: 4.1.2
+    oxfmt: 0.72.0
+    oxlint: 1.87.0
+    oxlint-tsgolint: 7.0.2004
+    publint: 0.3.25
+    tsdown: 0.23.1
+    typescript: 7.0.2
+
+  testing:
+    vitest: 5.0.3
 
   types:
+    # Retain the Node/undici type compatibility pin for MSW 2.
     "@types/node": 22.19.15
-minimumReleaseAgeExclude:
-  # Renovate security update: pnpm@11.5.3 || 11.8.0 || 11.11.0
-  - pnpm@11.5.3 || 11.8.0 || 11.11.0

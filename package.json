@@ -50,10 +50,13 @@
     "publint": "catalog:dev",
     "tsdown": "catalog:dev",
     "typescript": "catalog:dev",
-    "vitest": "catalog:dev"
+    "vitest": "catalog:testing"
   },
   "peerDependencies": {
     "msw": ">=2.11.0 <3.0.0"
   },
-  "packageManager": "pnpm@11.11.0"
+  "engines": {
+    "node": ">=24.11.0"
+  },
+  "packageManager": "pnpm@12.11.2"
 }

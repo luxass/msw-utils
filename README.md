@@ -31,6 +31,7 @@ export const mockFetch = createMockFetch({ mswServer: server });
 ```ts
 // vitest.setup.ts
 import { afterAll, afterEach, beforeAll } from "vitest";
+
 import { server } from "./test/utils.js";
 
 beforeAll(() => server.listen({ onUnhandledRequest: "error" }));
@@ -41,6 +42,7 @@ afterEach(() => server.resetHandlers());
 ```ts
 // your-test.test.ts
 import { HttpResponse } from "msw";
+
 import { mockFetch } from "./test/utils.js";
 
 test("should fetch version", async () => {
@@ -72,6 +74,7 @@ export const mockFetch = createMockFetch({ mswServer: server });
 ```ts
 // vitest.setup.ts
 import { afterAll, afterEach, beforeAll, vi } from "vitest";
+
 import { mockFetch, server } from "./test/utils.js";
 
 vi.stubGlobal("mockFetch", mockFetch);
