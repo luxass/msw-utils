@@ -3,21 +3,28 @@ import { setupServer } from "msw/node";
 import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from "vitest";
 
 import { createMockFetch } from "../src";
+import { listenOptions } from "./helpers/msw";
 
 const server = setupServer();
 const mockFetch = createMockFetch({ mswServer: server });
 const base = "http://localhost";
 
-beforeAll(() => server.listen({ onUnhandledRequest: "error" }));
+beforeAll(() => {
+  server.listen(listenOptions);
+});
 afterEach(() => {
   server.resetHandlers();
   vi.restoreAllMocks();
 });
-afterAll(() => server.close());
+afterAll(() => {
+  server.close();
+});
 
 describe("HEAD handling", () => {
   it("returns 200 with empty body when resolver is undefined", async () => {
-    mockFetch("HEAD", `${base}/head/empty`, async () => undefined as any);
+    mockFetch("HEAD", `${base}/head/empty`, async () => {
+      // Intentionally return no response to exercise the HEAD fallback.
+    });
 
     const res = await fetch(`${base}/head/empty`, { method: "HEAD" });
     expect(res.status).toBe(200);
@@ -40,6 +47,25 @@ describe("HEAD handling", () => {
     expect(res.status).toBe(204);
     expect(res.statusText).toBe("No Content");
     expect(res.headers.get("x-test")).toBe("1");
+    expect(await res.text()).toBe("");
+  });
+
+  it("copies status, statusText, and headers from a native Response without its body", async () => {
+    mockFetch(
+      "HEAD",
+      `${base}/head/native`,
+      () =>
+        new Response("ignored", {
+          status: 202,
+          statusText: "Accepted",
+          headers: { "X-Test": "native" },
+        }),
+    );
+
+    const res = await fetch(`${base}/head/native`, { method: "HEAD" });
+    expect(res.status).toBe(202);
+    expect(res.statusText).toBe("Accepted");
+    expect(res.headers.get("x-test")).toBe("native");
     expect(await res.text()).toBe("");
   });
 

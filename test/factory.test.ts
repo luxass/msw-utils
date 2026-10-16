@@ -3,17 +3,22 @@ import { setupServer } from "msw/node";
 import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from "vitest";
 
 import { createMockFetch } from "../src";
+import { listenOptions, unhandledFetchError } from "./helpers/msw";
 
 const server = setupServer();
 const mockFetch = createMockFetch({ mswServer: server });
 const base = "http://localhost";
 
-beforeAll(() => server.listen({ onUnhandledRequest: "error" }));
+beforeAll(() => {
+  server.listen(listenOptions);
+});
 afterEach(() => {
   server.resetHandlers();
   vi.restoreAllMocks();
 });
-afterAll(() => server.close());
+afterAll(() => {
+  server.close();
+});
 
 describe("createMockFetch - Single Method Approach", () => {
   it("registers single method and responds", async () => {
@@ -122,18 +127,20 @@ describe("createMockFetch - Single Method Approach", () => {
     expect(spy).toHaveBeenCalledTimes(1);
     expect(spy.mock.calls[0]).toHaveLength(1);
 
-    await expect(() => fetch(`${base}/users/123/posts/456`)).rejects.toThrow(
-      /\[MSW\] Cannot bypass a request when using the "error" strategy for the "onUnhandledRequest" option\./,
-    );
+    await expect(fetch(`${base}/users/123/posts/456`)).rejects.toMatchObject(unhandledFetchError);
   });
 
   it("throws on missing url/resolver for single method", () => {
-    expect(() => mockFetch("GET" as any)).toThrow("invalid arguments for mockFetch");
+    expect(() => {
+      mockFetch("GET" as any);
+    }).toThrow("invalid arguments for mockFetch");
   });
 
   it("throws when passing a single endpoint tuple without outer array", () => {
     const bad = ["GET", "/wrong/single-tuple", () => HttpResponse.json({ ok: true })];
-    expect(() => mockFetch(bad as any)).toThrow("invalid arguments for mockFetch");
+    expect(() => {
+      mockFetch(bad as any);
+    }).toThrow("invalid arguments for mockFetch");
   });
 });
 
@@ -251,9 +258,7 @@ describe("createMockFetch - Array Method Approach", () => {
     expect(spy).toHaveBeenCalledTimes(1);
     expect(spy.mock.calls[0]).toHaveLength(2);
 
-    await expect(() => fetch(`${base}/users/123/posts/456`)).rejects.toThrow(
-      /\[MSW\] Cannot bypass a request when using the "error" strategy for the "onUnhandledRequest" option\./,
-    );
+    await expect(fetch(`${base}/users/123/posts/456`)).rejects.toMatchObject(unhandledFetchError);
   });
 
   it("registers batch endpoints with array methods", async () => {
@@ -342,6 +347,8 @@ describe("createMockFetch - Mixed Batch Operations", () => {
   });
 
   it("throws on empty batch", () => {
-    expect(() => mockFetch([] as any)).toThrow("invalid arguments for mockFetch");
+    expect(() => {
+      mockFetch([] as any);
+    }).toThrow("invalid arguments for mockFetch");
   });
 });
