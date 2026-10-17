@@ -6,11 +6,11 @@ strictDepBuilds: true
 blockExoticSubdeps: true
 
 overrides:
-  undici-types: 6.24.0
+  undici-types: 6.29.0
 
 catalogs:
   dev:
-    msw: 2.12.14
+    msw: 2.15.0
     oxfmt: 0.72.0
     oxlint: 1.87.0
     oxlint-tsgolint: 7.0.2004
@@ -19,9 +19,9 @@ catalogs:
     typescript: 7.0.2
 
   msw-versions:
-    msw-2-min: npm:msw@2.11.0
+    msw-2-min: npm:msw@2.15.0
     msw-2: npm:msw@2.15.0
-    msw-3-min: npm:msw@3.0.0
+    msw-3-min: npm:msw@3.0.3
     msw-3: npm:msw@3.0.3
 
   testing:
@@ -29,4 +29,4 @@ catalogs:
 
   types:
     # Retain the Node/undici type compatibility pin for MSW 2.
-    "@types/node": 22.19.15
+    "@types/node": 22.20.5
