@@ -113,6 +113,7 @@ describe("HEAD handling", () => {
 
   it("removes the body from a thrown response", async () => {
     mockFetch("HEAD", `${base}/head/thrown`, () => {
+      // oxlint-disable-next-line typescript/only-throw-error -- MSW supports thrown responses as resolver results.
       throw new Response("ignored", { status: 202, headers: { "X-Thrown": "yes" } });
     });
 
@@ -125,6 +126,7 @@ describe("HEAD handling", () => {
   it("removes bodies from responses thrown by generators", async () => {
     mockFetch("HEAD", `${base}/head/generator-throw`, function* () {
       yield new Response("first", { status: 201 });
+      // oxlint-disable-next-line typescript/only-throw-error -- MSW supports thrown responses as resolver results.
       throw new Response("last", { status: 202 });
     });
 
