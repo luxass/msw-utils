@@ -45,20 +45,20 @@ type ResponseSequence = Exclude<Awaited<ReturnType<HttpResponseResolver>>, Respo
 async function* headResponses(responses: ResponseSequence) {
   const iterator =
     Symbol.iterator in responses ? responses[Symbol.iterator]() : responses[Symbol.asyncIterator]();
-  let done = false;
+  let step: Awaited<ReturnType<typeof iterator.next>> | undefined;
   try {
-    while (true) {
-      const step = await iterator.next();
-      done = step.done === true;
+    step = await iterator.next();
+    while (step.done !== true) {
       const value = await step.value;
-      const response = value ? toHeadResponse(value) : undefined;
-      if (done) return response;
-      yield response;
+      yield value ? toHeadResponse(value) : undefined;
+      step = await iterator.next();
     }
+    const value = await step.value;
+    return value ? toHeadResponse(value) : undefined;
   } catch (error) {
     throw error instanceof Response ? toHeadResponse(error) : error;
   } finally {
-    if (!done) await iterator.return?.();
+    if (step?.done !== true) await iterator.return?.();
   }
 }
 
