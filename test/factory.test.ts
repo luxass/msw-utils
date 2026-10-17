@@ -113,6 +113,20 @@ describe("createMockFetch - Single Method Approach", () => {
     expect(await resGet.json()).toEqual({ id: "123", postId: "456" });
   });
 
+  it.each(["Suffix", "_suffix", "2"])(
+    "keeps literal %s outside an OpenAPI parameter name",
+    async (suffix) => {
+      const mockFetch = createMockFetch({ mswServer: server, replaceOpenAPIPathParams: true });
+      mockFetch("GET", `${base}/files/{name}${suffix}`, ({ params }) =>
+        HttpResponse.json({ name: params.name }),
+      );
+
+      const response = await fetch(`${base}/files/report${suffix}`);
+      expect(response.status).toBe(200);
+      expect(await response.json()).toEqual({ name: "report" });
+    },
+  );
+
   it("does not replace openapi path parameters when not enabled with single method", async () => {
     const spy = vi.spyOn(server, "use");
     const mockFetch = createMockFetch({

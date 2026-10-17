@@ -66,5 +66,10 @@ const OPENAPI_PATH_PARAM_RE = /\{([^}]+)\}/gu;
 
 export function replaceOpenAPIPathParamsWithMSWParams(url: string): string {
   OPENAPI_PATH_PARAM_RE.lastIndex = 0;
-  return url.replace(OPENAPI_PATH_PARAM_RE, ":$1");
+  return url.replace(OPENAPI_PATH_PARAM_RE, (placeholder: string, name: string, offset: number) => {
+    const next = url[offset + placeholder.length];
+    // Stop literal suffix text from becoming part of the MSW parameter name.
+    const boundary = next !== undefined && /[A-Za-z0-9_]/u.test(next) ? "\\" : "";
+    return `:${name}${boundary}`;
+  });
 }
