@@ -146,7 +146,7 @@ describe("createMockFetch - Single Method Approach", () => {
 
   it("throws on missing url/resolver for single method", () => {
     expect(() => {
-      mockFetch("GET");
+      Reflect.apply(mockFetch, undefined, ["GET"]);
     }).toThrow("invalid arguments for mockFetch");
   });
 
