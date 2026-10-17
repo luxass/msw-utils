@@ -146,14 +146,14 @@ describe("createMockFetch - Single Method Approach", () => {
 
   it("throws on missing url/resolver for single method", () => {
     expect(() => {
-      mockFetch("GET" as any);
+      mockFetch("GET");
     }).toThrow("invalid arguments for mockFetch");
   });
 
   it("throws when passing a single endpoint tuple without outer array", () => {
     const bad = ["GET", "/wrong/single-tuple", () => HttpResponse.json({ ok: true })];
     expect(() => {
-      mockFetch(bad as any);
+      Reflect.apply(mockFetch, undefined, [bad]);
     }).toThrow("invalid arguments for mockFetch");
   });
 });
@@ -362,7 +362,7 @@ describe("createMockFetch - Mixed Batch Operations", () => {
 
   it("throws on empty batch", () => {
     expect(() => {
-      mockFetch([] as any);
+      mockFetch([]);
     }).toThrow("invalid arguments for mockFetch");
   });
 });
