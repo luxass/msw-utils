@@ -113,6 +113,20 @@ describe("createMockFetch - Single Method Approach", () => {
     expect(await resGet.json()).toEqual({ id: "123", postId: "456" });
   });
 
+  it.each(["Suffix", "_suffix", "2"])(
+    "keeps literal %s outside an OpenAPI parameter name",
+    async (suffix) => {
+      const mockFetch = createMockFetch({ mswServer: server, replaceOpenAPIPathParams: true });
+      mockFetch("GET", `${base}/files/{name}${suffix}`, ({ params }) =>
+        HttpResponse.json({ name: params.name }),
+      );
+
+      const response = await fetch(`${base}/files/report${suffix}`);
+      expect(response.status).toBe(200);
+      expect(await response.json()).toEqual({ name: "report" });
+    },
+  );
+
   it("does not replace openapi path parameters when not enabled with single method", async () => {
     const spy = vi.spyOn(server, "use");
     const mockFetch = createMockFetch({
@@ -132,14 +146,14 @@ describe("createMockFetch - Single Method Approach", () => {
 
   it("throws on missing url/resolver for single method", () => {
     expect(() => {
-      mockFetch("GET" as any);
+      mockFetch("GET");
     }).toThrow("invalid arguments for mockFetch");
   });
 
   it("throws when passing a single endpoint tuple without outer array", () => {
     const bad = ["GET", "/wrong/single-tuple", () => HttpResponse.json({ ok: true })];
     expect(() => {
-      mockFetch(bad as any);
+      Reflect.apply(mockFetch, undefined, [bad]);
     }).toThrow("invalid arguments for mockFetch");
   });
 });
@@ -348,7 +362,7 @@ describe("createMockFetch - Mixed Batch Operations", () => {
 
   it("throws on empty batch", () => {
     expect(() => {
-      mockFetch([] as any);
+      mockFetch([]);
     }).toThrow("invalid arguments for mockFetch");
   });
 });
