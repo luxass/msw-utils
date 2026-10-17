@@ -271,6 +271,28 @@ describe("typed Wrapper - Runtime Tests", () => {
 function assertTypedMockFetchTypeSignatures() {
   const typedMock = createTypedMockFetch<MyURLs>(mockFetch);
 
+  typedMock<"http://localhost/api/products", "GET">("GET", `${base}/api/products`, () =>
+    HttpResponse.json([{ id: "1", name: "Widget", price: 9.99 }]),
+  );
+
+  typedMock<"http://localhost/api/products", ["GET", "POST"]>(
+    ["GET", "POST"],
+    `${base}/api/products`,
+    ({ request }) =>
+      request.method === "GET"
+        ? HttpResponse.json([{ id: "1", name: "Widget", price: 9.99 }])
+        : HttpResponse.json({ id: "1", created: true }),
+  );
+
+  typedMock<"GET", "http://localhost/api/products">("GET", `${base}/api/products`, () =>
+    HttpResponse.json([{ id: "1", name: "Widget", price: 9.99 }]),
+  );
+
+  typedMock<"http://localhost/api/products", "GET">("GET", `${base}/api/products`, () =>
+    // @ts-expect-error explicit URL-first type arguments still constrain response bodies
+    HttpResponse.json({ wrongShape: true }),
+  );
+
   typedMock([
     [
       "GET",

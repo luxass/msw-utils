@@ -8,7 +8,9 @@ export type NonEmptyArray<T> = [T, ...T[]];
  */
 export interface URLRegistry {}
 
-type EndpointMethods = HTTPMethod | Readonly<NonEmptyArray<HTTPMethod>>;
+/** Keep registered URL suggestions without rejecting other strings. */
+export type RegisteredURL<Registry> = (keyof Registry & string) | (string & Record<never, never>);
+export type EndpointMethods = HTTPMethod | Readonly<NonEmptyArray<HTTPMethod>>;
 type Endpoint = readonly [EndpointMethods, string, unknown];
 type MethodOf<Methods extends EndpointMethods> = Methods extends readonly HTTPMethod[]
   ? Methods[number]
@@ -24,7 +26,7 @@ type GetResponseType<
     : DefaultBodyType
   : DefaultBodyType;
 
-type TypedHttpResponseResolver<
+export type TypedHttpResponseResolver<
   Registry,
   Methods extends EndpointMethods,
   URL extends string,
@@ -43,7 +45,7 @@ type TypedEndpointsBatch<Registry, Endpoints extends readonly Endpoint[]> = {
 };
 
 export interface MockFetchFn<Registry extends object = URLRegistry> {
-  <const Methods extends EndpointMethods, const URL extends string>(
+  <const Methods extends EndpointMethods, const URL extends RegisteredURL<Registry>>(
     methods: Methods,
     url: URL,
     resolver: TypedHttpResponseResolver<Registry, NoInfer<Methods>, NoInfer<URL>>,
