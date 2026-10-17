@@ -15,7 +15,7 @@ npm install @luxass/msw-utils msw
 ```
 
 Requires Node.js >=24.11.0 and MSW `>=2.11.0 <3.0.0 || >=3.0.0 <4.0.0`.
-MSW v3 requires TypeScript >=5.9 when using TypeScript.
+Requires TypeScript >=5.4 when using TypeScript. MSW v3 requires TypeScript >=5.9.
 
 ## Usage
 
@@ -114,6 +114,152 @@ test("should fetch version", async () => {
 
 </details>
 
+## Typed Mock Fetch
+
+The library provides type-safe mocking with TypeScript through two approaches. Registered URL/method pairs constrain response bodies. Unregistered pairs keep MSW's default response body type.
+
+### Global Type Registry (Module Augmentation)
+
+You can augment the `URLRegistry` interface to define type-safe routes globally:
+
+```ts
+// types/msw-utils.d.ts
+import "@luxass/msw-utils";
+
+declare module "@luxass/msw-utils" {
+  interface URLRegistry {
+    "/api/users": {
+      GET: Array<{ id: number; name: string }>;
+      POST: { id: number; created: boolean };
+    };
+    "/api/posts/:id": {
+      GET: { id: string; title: string; body: string };
+      PUT: { id: string; updated: boolean };
+    };
+  }
+}
+```
+
+```ts
+// your-test.test.ts
+import { HttpResponse } from "msw";
+
+import { mockFetch } from "./test/utils.js";
+
+test("should fetch users with type safety", async () => {
+  // TypeScript enforces the response type matches URLRegistry
+  mockFetch("GET", "/api/users", () => {
+    return HttpResponse.json([
+      { id: 1, name: "John" },
+      { id: 2, name: "Jane" },
+    ]);
+  });
+
+  const response = await fetch("/api/users");
+  const data = await response.json();
+
+  expect(data).toEqual([
+    { id: 1, name: "John" },
+    { id: 2, name: "Jane" },
+  ]);
+});
+
+test("should create user with type safety", async () => {
+  mockFetch("POST", "/api/users", () => {
+    return HttpResponse.json({ id: 1, created: true });
+  });
+
+  const response = await fetch("/api/users", {
+    method: "POST",
+    body: JSON.stringify({ name: "John" }),
+  });
+  const data = await response.json();
+
+  expect(data).toEqual({ id: 1, created: true });
+});
+```
+
+### Per-Instance Type Registry
+
+Alternatively, you can use `createTypedMockFetch` to create a typed wrapper without global augmentation:
+
+```ts
+// test/utils.ts
+import { createMockFetch, createTypedMockFetch } from "@luxass/msw-utils";
+import { setupServer } from "msw/node";
+
+interface MyURLs {
+  "/api/products": {
+    GET: Array<{ id: string; name: string; price: number }>;
+    POST: { id: string; created: boolean };
+  };
+  "/api/orders/:orderId": {
+    GET: { orderId: string; total: number; items: string[] };
+  };
+}
+
+export const server = setupServer();
+export const mockFetch = createMockFetch({ mswServer: server });
+export const typedMock = createTypedMockFetch<MyURLs>(mockFetch);
+```
+
+```ts
+// your-test.test.ts
+import { HttpResponse } from "msw";
+
+import { typedMock } from "./test/utils.js";
+
+test("should fetch products with type safety", async () => {
+  // TypeScript enforces the response type matches MyURLs
+  typedMock("GET", "/api/products", () => {
+    return HttpResponse.json([
+      { id: "1", name: "Widget", price: 9.99 },
+      { id: "2", name: "Gadget", price: 19.99 },
+    ]);
+  });
+
+  const response = await fetch("/api/products");
+  const data = await response.json();
+
+  expect(data).toHaveLength(2);
+});
+
+test("should handle path parameters with type safety", async () => {
+  typedMock("GET", "/api/orders/:orderId", ({ params }) => {
+    return HttpResponse.json({
+      orderId: params.orderId as string,
+      total: 99.99,
+      items: ["item1", "item2"],
+    });
+  });
+
+  const response = await fetch("/api/orders/123");
+  const data = await response.json();
+
+  expect(data.orderId).toBe("123");
+});
+```
+
+For typed batches, set the `HttpResponse.json` response type explicitly. MSW v2 needs this type argument to check each batch entry:
+
+```ts
+typedMock([
+  [
+    "GET",
+    "/api/products",
+    () =>
+      HttpResponse.json<MyURLs["/api/products"]["GET"]>([{ id: "1", name: "Widget", price: 9.99 }]),
+  ],
+]);
+```
+
+Both approaches support:
+
+- Single method endpoints
+- Multiple methods on the same URL
+- Path parameters
+- Batch registration of endpoints
+
 ## API
 
 ### `createMockFetch(options)`
@@ -145,6 +291,42 @@ Register multiple endpoints at once.
 #### Parameters
 
 - `endpoints`: Array of `[methods, url, resolver]` tuples
+
+### `createTypedMockFetch(mockFetch)`
+
+Creates a type-safe wrapper around `mockFetch` with inline URL registry. Provides an alternative to module augmentation for users who prefer explicit type parameters.
+
+#### Parameters
+
+- `mockFetch`: A `MockFetchFn` instance from `createMockFetch()`
+
+#### Type Parameters
+
+- `Registry`: Record mapping URLs to HTTP methods and their response types
+
+#### Returns
+
+A type-safe `mockFetch` wrapper with enforced response types based on the registry.
+
+#### Example
+
+```ts
+interface MyURLs {
+  "/api/users": {
+    GET: User[];
+    POST: CreateUserResponse;
+  };
+}
+
+const mockFetch = createMockFetch({ mswServer: server });
+const typedMock = createTypedMockFetch<MyURLs>(mockFetch);
+
+// Type-safe - enforces User[] response
+typedMock("GET", "/api/users", () => HttpResponse.json([...yourResponse]));
+
+// Type error - wrong response type
+typedMock("GET", "/api/users", () => HttpResponse.json("wrong"));
+```
 
 ## MSW version differences
 

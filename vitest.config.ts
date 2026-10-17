@@ -42,6 +42,7 @@ export default defineConfig({
               "test/factory.test.ts",
               "test/utils.head.test.ts",
               "test/compatibility.test.ts",
+              "test/typed-routes.test.ts",
             ],
             provide: { mswVersion: version, mswMajor: major, mswEntry: entry },
           },

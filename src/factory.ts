@@ -44,10 +44,10 @@ export function createMockFetch(options: CreateMockFetchOptions): MockFetchFn {
   }
 
   const mockFetch: MockFetchFn = (
-    methodsOrEndpoints,
+    methodsOrEndpoints: unknown,
     url?: string,
     resolver?: HttpResponseResolver,
-  ) => {
+  ): void => {
     if (
       Array.isArray(methodsOrEndpoints) &&
       methodsOrEndpoints.length > 0 &&
