@@ -118,6 +118,14 @@ test("should fetch version", async () => {
 
 The library provides type-safe mocking with TypeScript through two approaches. Registered URL/method pairs constrain response bodies. Unregistered pairs keep MSW's default response body type.
 
+For inferred JSON and text responses, import `HttpResponse` from this package:
+
+```ts
+import { HttpResponse } from "@luxass/msw-utils";
+```
+
+This export is the original MSW constructor with improved type signatures. It preserves MSW's runtime behavior, constructor, and other response helpers. It does not add a wrapper or runtime schema validation.
+
 ### Global Type Registry (Module Augmentation)
 
 You can augment the `URLRegistry` interface to define type-safe routes globally:
@@ -142,7 +150,7 @@ declare module "@luxass/msw-utils" {
 
 ```ts
 // your-test.test.ts
-import { HttpResponse } from "msw";
+import { HttpResponse } from "@luxass/msw-utils";
 
 import { mockFetch } from "./test/utils.js";
 
@@ -205,7 +213,7 @@ export const typedMock = createTypedMockFetch<MyURLs>(mockFetch);
 
 ```ts
 // your-test.test.ts
-import { HttpResponse } from "msw";
+import { HttpResponse } from "@luxass/msw-utils";
 
 import { typedMock } from "./test/utils.js";
 
@@ -240,18 +248,18 @@ test("should handle path parameters with type safety", async () => {
 });
 ```
 
-For typed batches, set the `HttpResponse.json` response type explicitly. MSW v2 needs this type argument to check each batch entry:
+Typed batches infer each response body without explicit response type arguments:
 
 ```ts
 typedMock([
-  [
-    "GET",
-    "/api/products",
-    () =>
-      HttpResponse.json<MyURLs["/api/products"]["GET"]>([{ id: "1", name: "Widget", price: 9.99 }]),
-  ],
+  ["GET", "/api/products", () => HttpResponse.json([{ id: "1", name: "Widget", price: 9.99 }])],
+  ["POST", "/api/products", () => HttpResponse.json({ id: "1", created: true })],
 ]);
 ```
+
+TypeScript rejects a response that does not match that entry's registered URL and method. Inference also preserves literal fields, nested arrays, tuples, and union responses.
+
+You can still import `HttpResponse` directly from `msw`. That import retains MSW's original type signatures, which can require explicit response types in batches.
 
 Both approaches support:
 
@@ -327,6 +335,12 @@ typedMock("GET", "/api/users", () => HttpResponse.json([...yourResponse]));
 // Type error - wrong response type
 typedMock("GET", "/api/users", () => HttpResponse.json("wrong"));
 ```
+
+### `HttpResponse`
+
+The MSW constructor with JSON and text body inference. Import it from `@luxass/msw-utils` to use typed batches without manual response type arguments.
+
+`new HttpResponse(...)`, explicit type arguments, and MSW's other static response helpers remain available. Responses are still MSW instances.
 
 ## MSW version differences
 

@@ -1,8 +1,8 @@
-import { HttpResponse } from "msw";
+import { HttpResponse as MSWHttpResponse } from "msw";
 import { setupServer } from "msw/node";
 import { afterAll, afterEach, beforeAll, describe, expect, it } from "vitest";
 
-import { createMockFetch, createTypedMockFetch, type URLRegistry } from "../src";
+import { createMockFetch, createTypedMockFetch, HttpResponse } from "../src";
 import { listenOptions } from "./helpers/msw";
 
 const base = "http://localhost" as const;
@@ -111,19 +111,14 @@ describe("module Augmentation - Runtime Tests", () => {
         "GET",
         `${base}/api/users`,
         () => {
-          return HttpResponse.json<URLRegistry["http://localhost/api/users"]["GET"]>([
-            { id: 1, name: "John" },
-          ]);
+          return HttpResponse.json([{ id: 1, name: "John" }]);
         },
       ],
       [
         "POST",
         `${base}/api/users`,
         () => {
-          return HttpResponse.json<URLRegistry["http://localhost/api/users"]["POST"]>({
-            id: 1,
-            created: true,
-          });
+          return HttpResponse.json({ id: 1, created: true });
         },
       ],
     ]);
@@ -163,6 +158,24 @@ describe("typed Wrapper - Runtime Tests", () => {
 
   it("returns the original registration function", () => {
     expect(typedMock).toBe(mockFetch);
+  });
+
+  it("infers responses for a batch entry with multiple methods", async () => {
+    typedMock([
+      [
+        ["GET", "POST"],
+        `${base}/api/products`,
+        ({ request }) =>
+          request.method === "GET"
+            ? HttpResponse.json([{ id: "1", name: "Widget", price: 9.99 }])
+            : HttpResponse.json({ id: "1", created: true }),
+      ],
+    ]);
+
+    const get = await fetch(`${base}/api/products`);
+    expect(await get.json()).toEqual([{ id: "1", name: "Widget", price: 9.99 }]);
+    const post = await fetch(`${base}/api/products`, { method: "POST" });
+    expect(await post.json()).toEqual({ id: "1", created: true });
   });
 
   it("should handle typed GET endpoint", async () => {
@@ -241,19 +254,14 @@ describe("typed Wrapper - Runtime Tests", () => {
         "GET",
         `${base}/api/products`,
         () => {
-          return HttpResponse.json<MyURLs["http://localhost/api/products"]["GET"]>([
-            { id: "1", name: "Widget", price: 9.99 },
-          ]);
+          return HttpResponse.json([{ id: "1", name: "Widget", price: 9.99 }]);
         },
       ],
       [
         "POST",
         `${base}/api/products`,
         () => {
-          return HttpResponse.json<MyURLs["http://localhost/api/products"]["POST"]>({
-            id: "1",
-            created: true,
-          });
+          return HttpResponse.json({ id: "1", created: true });
         },
       ],
     ]);
@@ -268,7 +276,9 @@ describe("typed Wrapper - Runtime Tests", () => {
   });
 });
 
-function assertTypedMockFetchTypeSignatures() {
+type InferredResult = { kind: "ok"; value: number } | { kind: "error"; message: string };
+
+function assertTypedMockFetchTypeSignatures(result: InferredResult) {
   const typedMock = createTypedMockFetch<MyURLs>(mockFetch);
 
   typedMock<"http://localhost/api/products", "GET">("GET", `${base}/api/products`, () =>
@@ -288,9 +298,11 @@ function assertTypedMockFetchTypeSignatures() {
     HttpResponse.json([{ id: "1", name: "Widget", price: 9.99 }]),
   );
 
-  typedMock<"http://localhost/api/products", "GET">("GET", `${base}/api/products`, () =>
+  typedMock<"http://localhost/api/products", "GET">(
+    "GET",
+    `${base}/api/products`,
     // @ts-expect-error explicit URL-first type arguments still constrain response bodies
-    HttpResponse.json({ wrongShape: true }),
+    () => HttpResponse.json({ wrongShape: true }),
   );
 
   typedMock([
@@ -298,14 +310,27 @@ function assertTypedMockFetchTypeSignatures() {
       "GET",
       `${base}/api/products`,
       () => {
-        return HttpResponse.json<MyURLs["http://localhost/api/products"]["GET"]>([
-          { id: "1", name: "Widget", price: 9.99 },
-        ]);
+        return HttpResponse.json([{ id: "1", name: "Widget", price: 9.99 }]);
       },
     ],
   ]);
 
   typedMock("GET", `${base}/unregistered`, () => HttpResponse.json({ unrestricted: true }));
+
+  // The native MSW import remains compatible with existing single and batch calls.
+  typedMock("GET", `${base}/api/products`, () =>
+    MSWHttpResponse.json([{ id: "1", name: "Widget", price: 9.99 }]),
+  );
+  typedMock([
+    [
+      "GET",
+      `${base}/api/products`,
+      () =>
+        MSWHttpResponse.json<MyURLs["http://localhost/api/products"]["GET"]>([
+          { id: "1", name: "Widget", price: 9.99 },
+        ]),
+    ],
+  ]);
 
   const isolatedMock = createTypedMockFetch<{
     "http://localhost/api/users": { GET: { source: "instance" } };
@@ -344,6 +369,59 @@ function assertTypedMockFetchTypeSignatures() {
 
   // @ts-expect-error runtime requires a resolver for batch registration
   typedMock([["GET", `${base}/typed-wrapper/batch-missing-resolver`]]);
+
+  const inferred = createTypedMockFetch<{
+    "/inference/nested": { GET: { state: "ready"; groups: { kind: "user"; ids: number[] }[] } };
+    "/inference/tuple": { GET: [number, string] };
+    "/inference/result": { GET: InferredResult };
+    "/inference/text": { GET: "ready" | "waiting" };
+    "/inference/nullable": { GET: { id: number } | null };
+    "/inference/number": { GET: 0 | 1 };
+  }>(mockFetch);
+
+  // No response-body annotations, including nested literals, tuples, and unions.
+  inferred([
+    [
+      "GET",
+      "/inference/nested",
+      () =>
+        HttpResponse.json({
+          state: "ready",
+          groups: [{ kind: "user", ids: [1, 2] }],
+        }),
+    ],
+    ["GET", "/inference/tuple", () => HttpResponse.json([1, "one"])],
+    ["GET", "/inference/result", () => HttpResponse.json(result)],
+    ["GET", "/inference/text", () => HttpResponse.text("ready")],
+    ["GET", "/inference/nullable", () => HttpResponse.json(null)],
+    ["GET", "/inference/number", () => HttpResponse.json(1)],
+  ]);
+
+  // @ts-expect-error the GET schema is not the POST schema
+  typedMock([["GET", `${base}/api/products`, () => HttpResponse.json({ id: "1", created: true })]]);
+
+  // @ts-expect-error multi-method batch entries cannot return unrelated bodies
+  typedMock([[["GET", "POST"], `${base}/api/products`, () => HttpResponse.json({ wrong: true })]]);
+
+  // @ts-expect-error a literal discriminant must match the registered value
+  inferred([["GET", "/inference/nested", () => HttpResponse.json({ state: "wrong", groups: [] })]]);
+
+  // @ts-expect-error tuple positions retain their registered types
+  inferred([["GET", "/inference/tuple", () => HttpResponse.json(["one", 1])]]);
+
+  inferred([
+    // @ts-expect-error union branches still require their declared fields
+    ["GET", "/inference/result", () => HttpResponse.json({ kind: "ok", message: "wrong" })],
+  ]);
+
+  // @ts-expect-error inferred text must match one of the registered literals
+  inferred([["GET", "/inference/text", () => HttpResponse.text("wrong")]]);
+
+  // @ts-expect-error a missing JSON body is not one of the registered text literals
+  inferred([["GET", "/inference/text", () => HttpResponse.json()]]);
+
+  // @ts-expect-error explicit body type arguments still check the JSON input
+  HttpResponse.json<{ id: number }>({ id: "wrong" });
 }
 
 describe("typed Wrapper - Type Signatures", () => {

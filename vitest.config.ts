@@ -43,6 +43,7 @@ export default defineConfig({
               "test/utils.head.test.ts",
               "test/compatibility.test.ts",
               "test/typed-routes.test.ts",
+              "test/http-response.test.ts",
             ],
             provide: { mswVersion: version, mswMajor: major, mswEntry: entry },
           },
