@@ -20,6 +20,32 @@ afterAll(() => {
   server.close();
 });
 
+describe("createMockFetch - Invalid Arguments", () => {
+  it.each([undefined, null, false, 0, "", Number.NaN])(
+    "rejects a missing or falsy MSW server (%s)",
+    (mswServer) => {
+      expect(() => {
+        Reflect.apply(createMockFetch, undefined, [{ mswServer }]);
+      }).toThrow("mswServer is required to create mockFetch");
+    },
+  );
+
+  it.each([undefined, null, ""])("rejects a missing or empty URL (%s)", (url) => {
+    expect(() => {
+      Reflect.apply(mockFetch, undefined, ["GET", url, () => HttpResponse.json({ ok: true })]);
+    }).toThrow("invalid arguments for mockFetch");
+  });
+
+  it.each([undefined, null, false, 0, ""])(
+    "rejects a missing or falsy resolver (%s)",
+    (resolver) => {
+      expect(() => {
+        Reflect.apply(mockFetch, undefined, ["GET", `${base}/invalid`, resolver]);
+      }).toThrow("invalid arguments for mockFetch");
+    },
+  );
+});
+
 describe("createMockFetch - Single Method Approach", () => {
   it("registers single method and responds", async () => {
     const spy = vi.spyOn(server, "use");
@@ -146,7 +172,7 @@ describe("createMockFetch - Single Method Approach", () => {
 
   it("throws on missing url/resolver for single method", () => {
     expect(() => {
-      mockFetch("GET");
+      Reflect.apply(mockFetch, undefined, ["GET"]);
     }).toThrow("invalid arguments for mockFetch");
   });
 
@@ -364,5 +390,46 @@ describe("createMockFetch - Mixed Batch Operations", () => {
     expect(() => {
       mockFetch([]);
     }).toThrow("invalid arguments for mockFetch");
+  });
+});
+
+function assertMockFetchTypeSignatures() {
+  mockFetch("GET", `${base}/type-safe/single`, () => {
+    return HttpResponse.json({ ok: true });
+  });
+
+  mockFetch(["GET", "POST"], `${base}/type-safe/multi`, ({ request }) => {
+    return HttpResponse.json({ method: request.method });
+  });
+
+  mockFetch([
+    [
+      "GET",
+      `${base}/type-safe/batch`,
+      () => {
+        return HttpResponse.json({ ok: true });
+      },
+    ],
+  ]);
+
+  // @ts-expect-error runtime requires both url and resolver for single-method registration
+  mockFetch("GET");
+
+  // @ts-expect-error runtime requires a resolver for single-method registration
+  mockFetch("GET", `${base}/type-safe/missing-resolver`);
+
+  // @ts-expect-error runtime requires a resolver for multi-method registration
+  mockFetch(["GET", "POST"], `${base}/type-safe/missing-resolver`);
+
+  // @ts-expect-error runtime requires a resolver for single-method batch registration
+  mockFetch([["GET", `${base}/type-safe/batch-missing-resolver`]]);
+
+  // @ts-expect-error runtime requires a resolver for multi-method batch registration
+  mockFetch([[["GET", "POST"], `${base}/type-safe/batch-multi`]]);
+}
+
+describe("createMockFetch - Type Signatures", () => {
+  it("keeps compile-time signatures aligned with runtime validation", () => {
+    expect(assertMockFetchTypeSignatures).toBeTypeOf("function");
   });
 });

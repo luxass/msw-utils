@@ -4,6 +4,12 @@ import type { setupServer } from "msw/node";
 import type { HTTPMethod, MockFetchFn, NonEmptyArray } from "./types";
 import { createHandlersFromMethods, replaceOpenAPIPathParamsWithMSWParams } from "./utils";
 
+type HandlerEndpoint = [
+  methods: HTTPMethod | NonEmptyArray<HTTPMethod>,
+  url: string,
+  resolver: HttpResponseResolver,
+];
+
 export interface CreateMockFetchOptions {
   mswServer: Pick<ReturnType<typeof setupServer>, "use">;
 
@@ -13,6 +19,16 @@ export interface CreateMockFetchOptions {
    * @default false
    */
   replaceOpenAPIPathParams?: boolean;
+}
+
+function resolveOptions(options: Partial<CreateMockFetchOptions>) {
+  const { mswServer, replaceOpenAPIPathParams = false } = options;
+
+  if (!mswServer) {
+    throw new Error("mswServer is required to create mockFetch");
+  }
+
+  return { mswServer, replaceOpenAPIPathParams };
 }
 
 /**
@@ -37,28 +53,20 @@ export interface CreateMockFetchOptions {
  * ```
  */
 export function createMockFetch(options: CreateMockFetchOptions): MockFetchFn {
-  const { mswServer, replaceOpenAPIPathParams = false } = options;
-
-  if (!mswServer) {
-    throw new Error("mswServer is required to create mockFetch");
-  }
+  const { mswServer, replaceOpenAPIPathParams } = resolveOptions(options);
 
   const mockFetch: MockFetchFn = (
-    methodsOrEndpoints,
-    url?: string,
+    methodsOrEndpoints: unknown,
+    url = "",
     resolver?: HttpResponseResolver,
-  ) => {
+  ): void => {
     if (
       Array.isArray(methodsOrEndpoints) &&
       methodsOrEndpoints.length > 0 &&
       Array.isArray(methodsOrEndpoints[0])
     ) {
       // handle batch registration
-      const endpoints = methodsOrEndpoints as [
-        NonEmptyArray<HTTPMethod> | HTTPMethod,
-        string,
-        HttpResponseResolver,
-      ][];
+      const endpoints = methodsOrEndpoints as HandlerEndpoint[];
       const handlers = endpoints.flatMap(([methods, endpointUrl, handlerResolver]) => {
         const methodArray = Array.isArray(methods) ? methods : [methods];
 
@@ -75,7 +83,7 @@ export function createMockFetch(options: CreateMockFetchOptions): MockFetchFn {
 
     if (url && resolver) {
       // handle single registration
-      const methods = methodsOrEndpoints as NonEmptyArray<HTTPMethod> | HTTPMethod;
+      const methods = methodsOrEndpoints as HandlerEndpoint[0];
       const methodArray = Array.isArray(methods) ? methods : [methods];
 
       const finalUrl = replaceOpenAPIPathParams ? replaceOpenAPIPathParamsWithMSWParams(url) : url;
