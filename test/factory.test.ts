@@ -20,6 +20,32 @@ afterAll(() => {
   server.close();
 });
 
+describe("createMockFetch - Invalid Arguments", () => {
+  it.each([undefined, null, false, 0, "", Number.NaN])(
+    "rejects a missing or falsy MSW server (%s)",
+    (mswServer) => {
+      expect(() => {
+        Reflect.apply(createMockFetch, undefined, [{ mswServer }]);
+      }).toThrow("mswServer is required to create mockFetch");
+    },
+  );
+
+  it.each([undefined, null, ""])("rejects a missing or empty URL (%s)", (url) => {
+    expect(() => {
+      Reflect.apply(mockFetch, undefined, ["GET", url, () => HttpResponse.json({ ok: true })]);
+    }).toThrow("invalid arguments for mockFetch");
+  });
+
+  it.each([undefined, null, false, 0, ""])(
+    "rejects a missing or falsy resolver (%s)",
+    (resolver) => {
+      expect(() => {
+        Reflect.apply(mockFetch, undefined, ["GET", `${base}/invalid`, resolver]);
+      }).toThrow("invalid arguments for mockFetch");
+    },
+  );
+});
+
 describe("createMockFetch - Single Method Approach", () => {
   it("registers single method and responds", async () => {
     const spy = vi.spyOn(server, "use");

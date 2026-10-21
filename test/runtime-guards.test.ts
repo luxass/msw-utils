@@ -25,13 +25,12 @@ describe("isMSWError", () => {
     expect(isMSWError(error)).toBe(false);
   });
 
-  it("returns false for non-Error objects", () => {
-    expect(isMSWError("string error")).toBe(false);
-    expect(isMSWError(null)).toBe(false);
-    expect(isMSWError(undefined)).toBe(false);
-    expect(isMSWError({})).toBe(false);
-    expect(isMSWError(123)).toBe(false);
-  });
+  it.each(["string error", null, undefined, {}, 123])(
+    "returns false for non-Error input %j",
+    (value) => {
+      expect(isMSWError(value)).toBe(false);
+    },
+  );
 
   it("returns false for errors with similar but not exact patterns", () => {
     const error1 = new Error("MSW error");
