@@ -19,6 +19,7 @@ jobs:
   zizmor:
     uses: luxass/shared-workflows/.github/workflows/reusable-ci-security.yaml@9770f7268daf358179c45895de8becc2e8525984 # v0.14.0
     permissions:
+      actions: read
       contents: read
       security-events: write
       id-token: write
