@@ -187,8 +187,8 @@ catalogs:
       version: 7.0.2
   msw-versions:
     msw-2:
-      specifier: npm:msw@2.15.0
-      version: 2.15.0
+      specifier: npm:msw@3.0.3
+      version: 3.0.3
     msw-2-min:
       specifier: npm:msw@2.11.0
       version: 2.11.0
@@ -222,7 +222,7 @@ importers:
         version: 2.12.14(@types/node@24.19.2)(typescript@7.0.2)
       msw-2:
         specifier: catalog:msw-versions
-        version: msw@2.15.0(@types/node@24.19.2)(typescript@7.0.2)
+        version: msw@3.0.3(@types/node@24.19.2)(graphql@16.14.2)(typescript@7.0.2)(vite@7.1.7(@types/node@24.19.2)(jiti@2.6.0)(yaml@2.8.2))
       msw-2-min:
         specifier: catalog:msw-versions
         version: msw@2.11.0(@types/node@24.19.2)(typescript@7.0.2)
@@ -530,9 +530,6 @@ packages:
 
   '@open-draft/deferred-promise@2.2.0':
     resolution: {integrity: sha512-CecwLWx3rhxVQF6V4bAgPS5t+So2sTbPgAzafKkVizyi7tlwpcFpdFqq+wqF2OwNBmqFuu6tOyouTuxgpMfzmA==}
-
-  '@open-draft/deferred-promise@3.0.0':
-    resolution: {integrity: sha512-XW375UK8/9SqUVNVa6M0yEy8+iTi4QN5VZ7aZuRFQmy76LRwI9wy5F4YIBU6T+eTe2/DNDo8tqu8RHlwLHM6RA==}
 
   '@open-draft/logger@0.3.0':
     resolution: {integrity: sha512-X2g45fzhxH238HKO4xbSr7+wBS8Fvw6ixhTDuvLd5mqh6bJJCFAPwU9mPDxbcrRtfxv4u5IHCEH77BmxvXmmxQ==}
@@ -1586,16 +1583,6 @@ packages:
       typescript:
         optional: true
 
-  msw@2.15.0:
-    resolution: {integrity: sha512-2wQAmKkQKxRuXvYJxVhPGG0wZNBQyD06oJvxqw90XqLvptdqxdlHrFUfEteKkpaNORX3Xzc+HtEl/q0nfmN2wQ==}
-    engines: {node: '>=18'}
-    hasBin: true
-    peerDependencies:
-      typescript: '>= 4.8.x'
-    peerDependenciesMeta:
-      typescript:
-        optional: true
-
   msw@3.0.0:
     resolution: {integrity: sha512-+q6kq14TdUPbDiYn1qdhGpdZ2wvMTl5FEdt6cA2gK78wh56erHPDRN/t/MsGJYyRi4zt3AEctKUQPgujeeZrQg==}
     engines: {node: '>=22.12.0'}
@@ -2294,8 +2281,6 @@ snapshots:
 
   '@open-draft/deferred-promise@2.2.0': {}
 
-  '@open-draft/deferred-promise@3.0.0': {}
-
   '@open-draft/logger@0.3.0':
     dependencies:
       is-node-process: 1.2.0
@@ -2944,31 +2929,6 @@ snapshots:
       path-to-regexp: 6.3.0
       picocolors: 1.1.1
       rettime: 0.10.1
-      statuses: 2.0.2
-      strict-event-emitter: 0.5.1
-      tough-cookie: 6.0.2
-      type-fest: 5.10.0
-      until-async: 3.0.2
-      yargs: 17.7.2
-    optionalDependencies:
-      typescript: 7.0.2
-    transitivePeerDependencies:
-      - '@types/node'
-
-  msw@2.15.0(@types/node@24.19.2)(typescript@7.0.2):
-    dependencies:
-      '@inquirer/confirm': 6.3.3(@types/node@24.19.2)
-      '@mswjs/interceptors': 0.41.3
-      '@open-draft/deferred-promise': 3.0.0
-      '@types/statuses': 2.0.6
-      cookie: 1.1.1
-      graphql: 16.14.2
-      headers-polyfill: 5.0.1
-      is-node-process: 1.2.0
-      outvariant: 1.4.3
-      path-to-regexp: 6.3.0
-      picocolors: 1.1.1
-      rettime: 0.11.12
       statuses: 2.0.2
       strict-event-emitter: 0.5.1
       tough-cookie: 6.0.2
