@@ -19,7 +19,7 @@ catalogs:
     typescript: 7.0.2
 
   msw-versions:
-    msw-2-min: npm:msw@2.11.0
+    msw-2-min: npm:msw@3.0.3
     msw-2: npm:msw@2.15.0
     msw-3-min: npm:msw@3.0.0
     msw-3: npm:msw@3.0.3
