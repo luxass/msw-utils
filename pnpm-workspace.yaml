@@ -6,12 +6,12 @@ strictDepBuilds: true
 blockExoticSubdeps: true
 
 overrides:
-  undici-types: 6.24.0
+  undici-types: 6.29.1
 
 catalogs:
   dev:
     msw: 3.0.3
-    oxfmt: 0.72.0
+    oxfmt: 0.73.0
     oxlint: 1.87.0
     oxlint-tsgolint: 7.0.2004
     publint: 0.3.25
