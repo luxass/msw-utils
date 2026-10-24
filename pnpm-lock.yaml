@@ -205,7 +205,7 @@ catalogs:
       version: 24.19.2
 
 overrides:
-  undici-types: 6.29.1
+  undici-types: 8.12.2
 
 importers:
 
@@ -1895,8 +1895,8 @@ packages:
   unconfig-core@7.5.0:
     resolution: {integrity: sha512-Su3FauozOGP44ZmKdHy2oE6LPjk51M/TRRjHv2HNCWiDvfvCoxC2lno6jevMA91MYAdCdwP05QnWdWpSbncX/w==}
 
-  undici-types@6.29.1:
-    resolution: {integrity: sha512-8ewZRMhr1pEZVOUITV/cBrtH8iz6juS76jNqam5zXA1LQuTjM5CcidoAEIp8u+3OJc7EWKfMhW7CBD2xJJVh4A==}
+  undici-types@8.12.2:
+    resolution: {integrity: sha512-VoMeD2O0KdHhcn+oPqOrpivN+7aDOklVSwOLD7JNjbzV1CboAFek9IFOXnreoufTUtAsCsOK0iETiERPNR/fDA==}
 
   universalify@0.2.0:
     resolution: {integrity: sha512-CJ1QgKmNg3CwvAv/kOFmtnEN05f0D/cn9QntgNOQlQF9dgvVTHj3t+8JPdjqawCHk7V/KA+fbUqzZ9XWhcqPUg==}
@@ -2623,7 +2623,7 @@ snapshots:
 
   '@types/node@24.19.2':
     dependencies:
-      undici-types: 6.29.1
+      undici-types: 8.12.2
 
   '@types/set-cookie-parser@2.4.10':
     dependencies:
@@ -3317,7 +3317,7 @@ snapshots:
       '@quansync/fs': 1.0.0
       quansync: 1.0.0
 
-  undici-types@6.29.1: {}
+  undici-types@8.12.2: {}
 
   universalify@0.2.0: {}
 
