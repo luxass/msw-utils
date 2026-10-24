@@ -24,7 +24,7 @@ catalogs:
     msw-3-min: npm:msw@3.0.0
 
   testing:
-    vitest: 5.0.3
+    vitest: 5.0.5
 
   types:
     # Retain the Node/undici type compatibility pin for MSW 2.

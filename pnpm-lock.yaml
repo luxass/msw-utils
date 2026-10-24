@@ -197,8 +197,8 @@ catalogs:
       version: 3.0.0
   testing:
     vitest:
-      specifier: 5.0.3
-      version: 5.0.3
+      specifier: 5.0.5
+      version: 5.0.5
   types:
     '@types/node':
       specifier: 24.19.2
@@ -246,7 +246,7 @@ importers:
         version: 7.0.2
       vitest:
         specifier: catalog:testing
-        version: 5.0.3(@types/node@24.19.2)(msw@3.0.3(@types/node@24.19.2)(graphql@16.14.2)(typescript@7.0.2)(vite@7.1.7(@types/node@24.19.2)(jiti@2.6.0)(yaml@2.8.2)))(vite@7.1.7(@types/node@24.19.2)(jiti@2.6.0)(yaml@2.8.2))
+        version: 5.0.5(@types/node@24.19.2)(msw@3.0.3(@types/node@24.19.2)(graphql@16.14.2)(typescript@7.0.2)(vite@7.1.7(@types/node@24.19.2)(jiti@2.6.0)(yaml@2.8.2)))(vite@7.1.7(@types/node@24.19.2)(jiti@2.6.0)(yaml@2.8.2))
 
 packages:
 
@@ -1299,10 +1299,10 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@vitest/mocker@5.0.3':
-    resolution: {integrity: sha512-T8sWAIbkSyAjkwTcaEc3Iu0o9A27X1/kdXrizhZkGuSKScRQtRzclfAMpOTcGdXCsqxeWlpGy3XjqaW8CpLORg==}
+  '@vitest/mocker@5.0.5':
+    resolution: {integrity: sha512-xLL3lkDegJZw+MGoGaCCsFayDZthGgpAtr3Vziyfc4p7xH89K7KRPcRBBh/kEYm0Aqkt5DtTmkYpBtRV/FrHZg==}
     peerDependencies:
-      msw: ^2.4.9
+      msw: ^2.4.9 || ^3.0.0
       vite: ^6.0.0 || ^7.0.0 || ^8.0.0
     peerDependenciesMeta:
       msw:
@@ -1310,8 +1310,8 @@ packages:
       vite:
         optional: true
 
-  '@vitest/spy@5.0.3':
-    resolution: {integrity: sha512-XhFysQTB8AZ+P4gMi+Lpo99vg2AZi0qKpaB9yXQl37+CaMEAPO3iH/wGVnSyL5MPERiLezpqTVtrR6UZH5GCXg==}
+  '@vitest/spy@5.0.5':
+    resolution: {integrity: sha512-lwJRExuH417257Q5wv9QYugN9IMJkoxcrKrYxGPQkBzl7wlNpTUxD/5yNX4ESKVUIShKPgkGchYPFMWOOk0wzw==}
 
   '@yuku-core/binding-android-arm64@0.18.1':
     resolution: {integrity: sha512-1XTUWTmnpwXNyPwRLSQDjvHu7WPgykzCniYtTk+5ppnriznVONWd9TRPcFxCR8dlZ7HFGtv8v1wzbQmtmVlHNQ==}
@@ -1402,8 +1402,8 @@ packages:
     resolution: {integrity: sha512-86diuUyeeWM8CrqhpGCaDafrzjS1s++7sWy2AbAPoFNz/xKv7ID57CR4pZsMuGCh60PtsnEx4z68b+Vgt07VPw==}
     engines: {node: '>=20.19.0'}
 
-  chai@6.2.2:
-    resolution: {integrity: sha512-NUPRluOfOiTKBKvWPtSD4PhFvWCqOi0BGStNWs57X9js7XGTprSmFoz5F0tWhR4WPjNeR9jXqdC7/UpSJTnlRg==}
+  chai@6.3.0:
+    resolution: {integrity: sha512-XWAtwJ6OHO+tj0EKCs0Y2UamnyOxseZWltU4x2U2wh8g4AigdjwvtUjvLP2tqkA/avxHEtzxNaqGq/YGNwckKg==}
     engines: {node: '>=18'}
 
   cli-width@4.1.0:
@@ -1624,10 +1624,6 @@ packages:
     resolution: {integrity: sha512-N8SpfPUnUp1bK+PMYW8qSWdl9U+wwNWI4QKxOYDy9JAro3WMX7p2OeVRF9v+347pnakNevPmiHhNmZ2HbFA76w==}
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
     hasBin: true
-
-  obug@2.2.1:
-    resolution: {integrity: sha512-XrsrhT5sybtKI6wakr2SPOlGZWWYbUXZ7a0jT8/QOeAPau+1X/bSegNe5YR75oJmEZQbKningirmGOEJCIk61Q==}
-    engines: {node: '>=12.20.0'}
 
   obug@3.0.0:
     resolution: {integrity: sha512-5vvB5+W7ePv+p3uqxi+RcW1XAzLW0/hxt3/4X4Lc4qHudzOhmBiBwOY6DRob4WnanAEGvNcLjF+KNOufrUoEQw==}
@@ -1962,20 +1958,20 @@ packages:
       yaml:
         optional: true
 
-  vitest@5.0.3:
-    resolution: {integrity: sha512-xMw97S3rjdtj5dkVat7jCsqWBpvchs3RlpQctUqwJD0KkERk40vz2fJ77lDwW/Vzh/pk18eItYAzkodhSes3jQ==}
+  vitest@5.0.5:
+    resolution: {integrity: sha512-cPODOMF8YnkiiYtDdHo6n4wWmBrOBBbOIYH2d33M4l3CdNn72h+qMmO6uXffUN6A5AZFXNND/d+krS9mgkXRfg==}
     engines: {node: ^22.12.0 || ^24.0.0 || >=26.0.0}
     hasBin: true
     peerDependencies:
       '@edge-runtime/vm': '*'
       '@opentelemetry/api': ^1.9.0
       '@types/node': ^22.0.0 || >=24.0.0
-      '@vitest/browser-playwright': 5.0.3
-      '@vitest/browser-preview': 5.0.3
+      '@vitest/browser-playwright': 5.0.5
+      '@vitest/browser-preview': 5.0.5
       '@vitest/browser-webdriverio': ^5.0.0-beta.5 || >=5.0.0
-      '@vitest/coverage-istanbul': 5.0.3
-      '@vitest/coverage-v8': 5.0.3
-      '@vitest/ui': 5.0.3
+      '@vitest/coverage-istanbul': 5.0.5
+      '@vitest/coverage-v8': 5.0.5
+      '@vitest/ui': 5.0.5
       happy-dom: '*'
       jsdom: '*'
       vite: ^6.4.0 || ^7.0.0 || ^8.0.0
@@ -2693,17 +2689,17 @@ snapshots:
   '@typescript/typescript-win32-x64@7.0.2':
     optional: true
 
-  '@vitest/mocker@5.0.3(msw@3.0.3(@types/node@24.19.2)(graphql@16.14.2)(typescript@7.0.2)(vite@7.1.7(@types/node@24.19.2)(jiti@2.6.0)(yaml@2.8.2)))(vite@7.1.7(@types/node@24.19.2)(jiti@2.6.0)(yaml@2.8.2))':
+  '@vitest/mocker@5.0.5(msw@3.0.3(@types/node@24.19.2)(graphql@16.14.2)(typescript@7.0.2)(vite@7.1.7(@types/node@24.19.2)(jiti@2.6.0)(yaml@2.8.2)))(vite@7.1.7(@types/node@24.19.2)(jiti@2.6.0)(yaml@2.8.2))':
     dependencies:
       '@jridgewell/trace-mapping': 0.3.31
-      '@vitest/spy': 5.0.3
+      '@vitest/spy': 5.0.5
       estree-walker: 3.0.3
       magic-string: 1.4.3
     optionalDependencies:
       msw: 3.0.3(@types/node@24.19.2)(graphql@16.14.2)(typescript@7.0.2)(vite@7.1.7(@types/node@24.19.2)(jiti@2.6.0)(yaml@2.8.2))
       vite: 7.1.7(@types/node@24.19.2)(jiti@2.6.0)(yaml@2.8.2)
 
-  '@vitest/spy@5.0.3': {}
+  '@vitest/spy@5.0.5': {}
 
   '@yuku-core/binding-android-arm64@0.18.1':
     optional: true
@@ -2755,7 +2751,7 @@ snapshots:
 
   cac@7.0.1: {}
 
-  chai@6.2.2: {}
+  chai@6.3.0: {}
 
   cli-width@4.1.0: {}
 
@@ -2988,8 +2984,6 @@ snapshots:
   mute-stream@3.0.0: {}
 
   nanoid@3.3.11: {}
-
-  obug@2.2.1: {}
 
   obug@3.0.0: {}
 
@@ -3351,15 +3345,15 @@ snapshots:
       jiti: 2.6.0
       yaml: 2.8.2
 
-  vitest@5.0.3(@types/node@24.19.2)(msw@3.0.3(@types/node@24.19.2)(graphql@16.14.2)(typescript@7.0.2)(vite@7.1.7(@types/node@24.19.2)(jiti@2.6.0)(yaml@2.8.2)))(vite@7.1.7(@types/node@24.19.2)(jiti@2.6.0)(yaml@2.8.2)):
+  vitest@5.0.5(@types/node@24.19.2)(msw@3.0.3(@types/node@24.19.2)(graphql@16.14.2)(typescript@7.0.2)(vite@7.1.7(@types/node@24.19.2)(jiti@2.6.0)(yaml@2.8.2)))(vite@7.1.7(@types/node@24.19.2)(jiti@2.6.0)(yaml@2.8.2)):
     dependencies:
       '@types/chai': 5.2.2
-      '@vitest/mocker': 5.0.3(msw@3.0.3(@types/node@24.19.2)(graphql@16.14.2)(typescript@7.0.2)(vite@7.1.7(@types/node@24.19.2)(jiti@2.6.0)(yaml@2.8.2)))(vite@7.1.7(@types/node@24.19.2)(jiti@2.6.0)(yaml@2.8.2))
-      chai: 6.2.2
+      '@vitest/mocker': 5.0.5(msw@3.0.3(@types/node@24.19.2)(graphql@16.14.2)(typescript@7.0.2)(vite@7.1.7(@types/node@24.19.2)(jiti@2.6.0)(yaml@2.8.2)))(vite@7.1.7(@types/node@24.19.2)(jiti@2.6.0)(yaml@2.8.2))
+      chai: 6.3.0
       es-module-lexer: 2.3.2
       expect-type: 1.4.0
       magic-string: 1.4.3
-      obug: 2.2.1
+      obug: 3.0.0
       picomatch: 4.0.7
       std-env: 4.3.0
       tinybench: 6.2.2
