@@ -364,7 +364,7 @@ The shared integration suite runs against MSW 2.11.0, 2.15.0, 3.0.0, and 3.0.3 i
 ```bash
 pnpm test
 pnpm test --project msw-2
-pnpm test --project msw-3
+pnpm test --project msw
 pnpm test --project msw-2-min --project msw-3-min
 ```
 

@@ -46,7 +46,6 @@
     "msw": "catalog:dev",
     "msw-2": "catalog:msw-versions",
     "msw-2-min": "catalog:msw-versions",
-    "msw-3": "catalog:msw-versions",
     "msw-3-min": "catalog:msw-versions",
     "oxfmt": "catalog:dev",
     "oxlint": "catalog:dev",

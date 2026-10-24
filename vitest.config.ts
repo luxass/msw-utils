@@ -6,7 +6,7 @@ const targets = [
   { name: "msw-2-min", version: "2.11.0", major: 2 },
   { name: "msw-2", version: "2.15.0", major: 2 },
   { name: "msw-3-min", version: "3.0.0", major: 3 },
-  { name: "msw-3", version: "3.0.3", major: 3 },
+  { name: "msw", version: "3.0.3", major: 3 },
 ];
 
 export default defineConfig({

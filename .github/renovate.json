@@ -1,4 +1,24 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["github>luxass/renovate-config"]
+  "extends": ["github>luxass/renovate-config"],
+  "packageRules": [
+    {
+      "description": "Keep MSW 2 test coverage on v2",
+      "matchFileNames": ["pnpm-workspace.yaml"],
+      "matchDepNames": ["msw-2"],
+      "allowedVersions": "<3.0.0"
+    },
+    {
+      "description": "Preserve minimum supported MSW versions for compatibility tests",
+      "matchFileNames": ["pnpm-workspace.yaml"],
+      "matchDepNames": ["msw-2-min", "msw-3-min"],
+      "enabled": false
+    },
+    {
+      "description": "Keep MSW development and latest-v3 tests on v3",
+      "matchFileNames": ["pnpm-workspace.yaml"],
+      "matchDepNames": ["msw"],
+      "allowedVersions": "<4.0.0"
+    }
+  ]
 }
