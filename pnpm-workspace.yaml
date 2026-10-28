@@ -28,4 +28,4 @@ catalogs:
 
   types:
     # Retain the Node/undici type compatibility pin for MSW 2.
-    "@types/node": 24.19.2
+    "@types/node": 26.6.5
